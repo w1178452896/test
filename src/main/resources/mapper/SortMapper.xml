@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taylorsfan.blog.repository.SortMapper">
+    <resultMap id="BaseResultMap" type="com.taylorsfan.blog.model.Sort">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sort_name" jdbcType="VARCHAR" property="sortName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, sort_name
+  </sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from sort
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sort
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sort
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.Sort">
+    insert into sort (id, sort_name)
+    values (#{id,jdbcType=INTEGER}, #{sortName,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Sort">
+        insert into sort
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="sortName != null">
+                sort_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="sortName != null">
+                #{sortName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.Sort">
+        update sort
+        <set>
+            <if test="sortName != null">
+                sort_name = #{sortName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Sort">
+    update sort
+    set sort_name = #{sortName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
