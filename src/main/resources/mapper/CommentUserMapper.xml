@@ -10,25 +10,10 @@
     <sql id="Base_Column_List">
     id, comment_id, user_id, status
   </sql>
-    <select id="selectAll" resultMap="BaseResultMap">
-        select * from comment_user
-    </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from comment_user
-        where id = #{id,jdbcType=INTEGER}
-    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from comment_user
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.CommentUser">
-    insert into comment_user (id, comment_id, user_id, 
-      status)
-    values (#{id,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER})
-  </insert>
+        delete from comment_user
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.CommentUser">
         insert into comment_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -60,26 +45,11 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.CommentUser">
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.CommentUser">
         update comment_user
-        <set>
-            <if test="commentId != null">
-                comment_id = #{commentId,jdbcType=INTEGER},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=INTEGER},
-            </if>
-        </set>
+        set comment_id = #{commentId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.CommentUser">
-    update comment_user
-    set comment_id = #{commentId,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

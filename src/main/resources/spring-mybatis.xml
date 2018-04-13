@@ -50,7 +50,7 @@
         <!-- 数据库连接池 -->
         <property name="dataSource" ref="dataSource"/>
         <!--起别名-->
-        <property name="typeAliasesPackage" value="com.taylorsfan.blog.model"/>
+        <property name="typeAliasesPackage" value="com.taylorsfan.blog.model,com.taylorsfan.blog.vo"/>
         <!--mapper文件路径-->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>

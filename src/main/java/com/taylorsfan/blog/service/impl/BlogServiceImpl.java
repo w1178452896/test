@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -20,12 +21,7 @@ public class BlogServiceImpl implements BlogService {
 
 
     @Override
-    public List<Blog> findAll(int pageNum, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Blog findOneById(int id) {
+    public List<Blog> findAll(Map<String, Integer> map) {
         return null;
     }
 

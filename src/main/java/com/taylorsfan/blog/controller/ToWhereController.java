@@ -1,5 +1,7 @@
 package com.taylorsfan.blog.controller;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,5 +25,10 @@ public class ToWhereController {
     @RequestMapping("/register")
     public String register() {
         return "register";
+    }
+
+    @RequestMapping("/user/manage/checkBlog")
+    public String checkBlog() {
+        return "redirect:/list/blogs";
     }
 }

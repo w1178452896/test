@@ -1,4 +1,4 @@
-package com.taylorsfan.blog.controller;
+package com.taylorsfan.blog.controller.user;
 
 import com.taylorsfan.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;

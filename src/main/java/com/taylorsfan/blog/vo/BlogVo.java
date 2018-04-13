@@ -11,6 +11,9 @@ public class BlogVo {
     private String title;
     private String createTime;
     private String content;
+    //评论
+    //用户的信息
+
     private List<CommentVo> commentVoList;
 
     public int getId() {

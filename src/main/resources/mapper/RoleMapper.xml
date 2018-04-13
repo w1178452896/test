@@ -6,25 +6,25 @@
         <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, role_name
-  </sql>
+        id, role_name
+    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
         select * from role
-  </select>
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from role
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectRoleNameListByUsername" resultType="java.lang.String">
+        select DISTINCT role.role_name roleName from role,user,user_role WHERE user.username = #{username}
+    AND user.id = user_role.user_id AND user_role.role_id = role.id;
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from role
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Role">
-    insert into role (id, role_name)
-    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR})
-  </insert>
+        delete from role
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Role">
         insert into role
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -44,18 +44,9 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.Role">
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Role">
         update role
-        <set>
-            <if test="roleName != null">
-                role_name = #{roleName,jdbcType=VARCHAR},
-            </if>
-        </set>
+        set role_name = #{roleName,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Role">
-    update role
-    set role_name = #{roleName,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

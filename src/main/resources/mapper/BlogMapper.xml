@@ -24,12 +24,6 @@
         delete from blog
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Blog">
-        insert into blog (id, create_time, title,
-        content, status)
-        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
-        #{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
-    </insert>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Blog">
         insert into blog
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -67,24 +61,6 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.Blog">
-        update blog
-        <set>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=VARCHAR},
-            </if>
-            <if test="title != null">
-                title = #{title,jdbcType=VARCHAR},
-            </if>
-            <if test="content != null">
-                content = #{content,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=INTEGER},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
     <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Blog">
         update blog
         set create_time = #{createTime,jdbcType=VARCHAR},

@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <script src="../js/jquery-3.3.1.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../css/login.css">
     <title>登录</title>
     <style>
@@ -29,15 +29,15 @@
     </div>
     <div class="sign-container">
         <div class="container-fluid">
-            <form action="">
+            <form  method="post" action="/user/login">
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                    <input type="text" class="form-control input-lg" placeholder="Username">
+                    <input type="text" class="form-control input-lg" placeholder="Username" name="username">
                 </div>
                 <br>
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                    <input type="text" class="form-control input-lg" placeholder="Password">
+                    <input type="text" class="form-control input-lg" placeholder="Password" name="password">
                 </div>
                 <br>
                 <div class="row">

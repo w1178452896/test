@@ -1,20 +1,26 @@
 package com.taylorsfan.blog.repository;
 
 import com.taylorsfan.blog.model.User;
+import com.taylorsfan.blog.vo.UserVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author taylorsfan
  */
 public interface UserMapper extends BaseMapper<User> {
-    int deleteByPrimaryKey(Integer id);
 
-    int insert(User record);
+    int updateByPrimaryKeyPassword2Null(Integer id);
 
-    int insertSelective(User record);
+    UserVo selectMsgByPrimaryKey(Integer id);
 
-    User selectByPrimaryKey(Integer id);
+    List<User> selectAllFanByUserId(Integer id);
 
-    int updateByPrimaryKeySelective(User record);
+    List<User> selectAllFocusByUserId(Integer id);
 
-    int updateByPrimaryKey(User record);
+    User selectOneByUsername(String username);
+
+    User selectOneByUserNameAndPassword(Map<String, String> map);
+
 }

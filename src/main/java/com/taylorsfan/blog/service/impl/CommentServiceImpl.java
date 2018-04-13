@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -18,14 +19,8 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
-
     @Override
-    public List<Comment> findAll(int pageNum, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Comment findOneById(int id) {
+    public List<Comment> findAll(Map<String, Integer> map) {
         return null;
     }
 

@@ -9,11 +9,11 @@
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, create_time, content, status, parent_id
-  </sql>
+        id, create_time, content, status, parent_id
+    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
         select * from comment
-  </select>
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -21,15 +21,9 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from comment
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Comment">
-    insert into comment (id, create_time, content, 
-      status, parent_id)
-    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER})
-  </insert>
+        delete from comment
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Comment">
         insert into comment
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -67,30 +61,12 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.Comment">
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Comment">
         update comment
-        <set>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=VARCHAR},
-            </if>
-            <if test="content != null">
-                content = #{content,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=INTEGER},
-            </if>
-            <if test="parentId != null">
-                parent_id = #{parentId,jdbcType=INTEGER},
-            </if>
-        </set>
+        set create_time = #{createTime,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        parent_id = #{parentId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Comment">
-    update comment
-    set create_time = #{createTime,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      parent_id = #{parentId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

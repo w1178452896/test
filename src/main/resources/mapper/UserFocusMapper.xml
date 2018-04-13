@@ -7,27 +7,25 @@
         <result column="focus_id" jdbcType="INTEGER" property="focusId"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, user_id, focus_id
-  </sql>
+        id, user_id, focus_id
+    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
         select * from user_focus
-  </select>
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from user_focus
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="count" parameterType="java.lang.String" resultType="int">
+        select COUNT(user_focus.*) from user_focus,user WHERE user.username = #{username}
+        AND user.id = user_focus.user_id
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from user_focus
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.UserFocus">
-    insert into user_focus (id, user_id, focus_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{focusId,jdbcType=INTEGER}
-      )
-  </insert>
+        delete from user_focus
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.UserFocus">
         insert into user_focus
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -53,22 +51,10 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.UserFocus">
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.UserFocus">
         update user_focus
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="focusId != null">
-                focus_id = #{focusId,jdbcType=INTEGER},
-            </if>
-        </set>
+        set user_id = #{userId,jdbcType=INTEGER},
+        focus_id = #{focusId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.UserFocus">
-    update user_focus
-    set user_id = #{userId,jdbcType=INTEGER},
-      focus_id = #{focusId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

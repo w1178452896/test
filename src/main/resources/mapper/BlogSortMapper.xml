@@ -7,27 +7,12 @@
         <result column="sort_id" jdbcType="INTEGER" property="sortId"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, blog_id, sort_id
-    </sql>
-    <select id="selectAll" resultMap="BaseResultMap">
-        select * from blog_sort
-    </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from blog_sort
-        where id = #{id,jdbcType=INTEGER}
-    </select>
+    id, blog_id, sort_id
+  </sql>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from blog_sort
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.BlogSort">
-        insert into blog_sort (id, blog_id, sort_id
-        )
-        values (#{id,jdbcType=INTEGER}, #{blogId,jdbcType=INTEGER}, #{sortId,jdbcType=INTEGER}
-        )
-    </insert>
+    delete from blog_sort
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.BlogSort">
         insert into blog_sort
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -53,22 +38,10 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.BlogSort">
-        update blog_sort
-        <set>
-            <if test="blogId != null">
-                blog_id = #{blogId,jdbcType=INTEGER},
-            </if>
-            <if test="sortId != null">
-                sort_id = #{sortId,jdbcType=INTEGER},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
     <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.BlogSort">
-        update blog_sort
-        set blog_id = #{blogId,jdbcType=INTEGER},
-        sort_id = #{sortId,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
+    update blog_sort
+    set blog_id = #{blogId,jdbcType=INTEGER},
+      sort_id = #{sortId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -20,12 +21,7 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     @Override
-    public List<Permission> findAll(int pageNum, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Permission findOneById(int id) {
+    public List<Permission> findAll(Map<String, Integer> map) {
         return null;
     }
 

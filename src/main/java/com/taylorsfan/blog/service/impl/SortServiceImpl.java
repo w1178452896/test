@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -20,16 +21,9 @@ public class SortServiceImpl implements SortService {
     @Autowired
     private SortMapper sortMapper;
 
-    @Override
-    public List<Sort> findAll(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Sort> sortList = sortMapper.selectAll();
-        PageInfo<Sort> pageInfo = new PageInfo<>(sortList);
-        return pageInfo.getList();
-    }
 
     @Override
-    public Sort findOneById(int id) {
+    public List<Sort> findAll(Map<String, Integer> map) {
         return null;
     }
 

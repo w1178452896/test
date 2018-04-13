@@ -6,8 +6,8 @@
         <result column="sort_name" jdbcType="VARCHAR" property="sortName"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, sort_name
-  </sql>
+        id, sort_name
+    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
         select * from sort
     </select>
@@ -18,13 +18,9 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from sort
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Sort">
-    insert into sort (id, sort_name)
-    values (#{id,jdbcType=INTEGER}, #{sortName,jdbcType=VARCHAR})
-  </insert>
+        delete from sort
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Sort">
         insert into sort
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -44,18 +40,9 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.Sort">
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Sort">
         update sort
-        <set>
-            <if test="sortName != null">
-                sort_name = #{sortName,jdbcType=VARCHAR},
-            </if>
-        </set>
+        set sort_name = #{sortName,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Sort">
-    update sort
-    set sort_name = #{sortName,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

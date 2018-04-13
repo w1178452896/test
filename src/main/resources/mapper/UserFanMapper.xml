@@ -7,8 +7,8 @@
         <result column="fan_id" jdbcType="INTEGER" property="fanId"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, user_id, fan_id
-  </sql>
+        id, user_id, fan_id
+    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
         select * from user_fan
     </select>
@@ -18,16 +18,14 @@
         from user_fan
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="count" parameterType="java.lang.String" resultType="int">
+        select COUNT(user_fan.*) from user_fan,user WHERE user.id = user_fan.user_id
+        AND user.username = #{username}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from user_fan
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.UserFan">
-    insert into user_fan (id, user_id, fan_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{fanId,jdbcType=INTEGER}
-      )
-  </insert>
+        delete from user_fan
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.UserFan">
         insert into user_fan
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -53,22 +51,10 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.taylorsfan.blog.model.UserFan">
+    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.UserFan">
         update user_fan
-        <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="fanId != null">
-                fan_id = #{fanId,jdbcType=INTEGER},
-            </if>
-        </set>
+        set user_id = #{userId,jdbcType=INTEGER},
+        fan_id = #{fanId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.UserFan">
-    update user_fan
-    set user_id = #{userId,jdbcType=INTEGER},
-      fan_id = #{fanId,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

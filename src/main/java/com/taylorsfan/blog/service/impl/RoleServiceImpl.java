@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author momo
@@ -20,12 +21,7 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public List<Role> findAll(int pageNum, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Role findOneById(int id) {
+    public List<Role> findAll(Map<String, Integer> map) {
         return null;
     }
 
