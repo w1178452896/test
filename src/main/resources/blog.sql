@@ -68,6 +68,18 @@ CREATE TABLE comment_user
 )
   ENGINE = InnoDB;
 
+CREATE TABLE notice
+(
+  id INT(20) AUTO_INCREMENT
+    PRIMARY KEY ,
+  create_time VARCHAR(60) NULL ,
+  msg VARCHAR(60) NULL ,
+  status INT(20) NULL ,
+  CONSTRAINT public_message_id_uindex
+  UNIQUE (id)
+)
+  ENGINE = InnoDB;
+
 CREATE TABLE permission
 (
   id INT(20) UNSIGNED AUTO_INCREMENT COMMENT 'id'
@@ -113,7 +125,9 @@ CREATE TABLE user
   description VARCHAR(60) NULL COMMENT 'description' ,
   img_url VARCHAR(60) NULL COMMENT 'imgUrl' ,
   country VARCHAR(60) NULL COMMENT 'country' ,
-  birthday VARCHAR(60) NULL COMMENT 'birthday'
+  birthday VARCHAR(60) NULL COMMENT 'birthday' ,
+  CONSTRAINT user_email_uindex
+  UNIQUE (email)
 )
   COMMENT 'user' ENGINE = InnoDB;
 
