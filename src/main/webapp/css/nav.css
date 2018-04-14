@@ -15,10 +15,41 @@
     font-size: 30px;
     color: #3893ff;
   }
-  .navbar,.navbar-brand,.navbar a {
-    height: 58px;
+  .dropdown-menu li {
+    margin: 14px 0px;
+  }
+  .dropdown-menu li:first-child, .dropdown-menu li:last-child {
+    margin: 0px;
+  }
+  .dropdown-menu span:nth-child(odd) {
+    font-size: 18px;
+    color: #ff7068;
+  }
+  .dropdown-menu span:nth-child(even) {
+    margin-left: 20px;
+  }
+  .dropdown img {
+    height: 50px;
+    width: 50px;
+    border: solid 1px #ede7f1;
   }
 }
 .navbar-collapse.in {
   overflow-y: hidden;
+}
+
+@media screen and (max-width: 768px) {
+  .mynav li {
+    text-align: center;
+  }
+  .dropdown {
+    margin: 10px 0px;
+  }
+  .dropdown-menu li:last-child {
+    border-bottom: solid 1px #efeaf2;
+  }
+  .dropdown img {
+    width: 100px;
+    height: 100px;
+  }
 }

@@ -17,18 +17,13 @@ public class ToWhereController {
         return "index";
     }
 
-    @RequestMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @RequestMapping("/register")
-    public String register() {
-        return "register";
-    }
-
     @RequestMapping("/user/manage/checkBlog")
     public String checkBlog() {
         return "redirect:/list/blogs";
+    }
+
+    @RequestMapping("/user-index")
+    public String user_index() {
+        return "user-index";
     }
 }
