@@ -7,6 +7,7 @@ import com.taylorsfan.blog.model.UserFan;
  */
 public interface UserFanMapper extends BaseMapper<UserFan> {
 
-    int count(String username);
+    int count(int userId);
 
+    int deleteByUserId(int userId);
 }

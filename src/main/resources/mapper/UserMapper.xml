@@ -25,11 +25,13 @@
         <result column="country" jdbcType="VARCHAR" property="country"/>
         <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
         <collection property="blogList" column="id" ofType="blog"
-                    select="com.taylorsfan.blog.repository.BlogMapper.findAllByUserId"/>
-        <collection property="roleList" column="username" ofType="role"
-                    select="com.taylorsfan.blog.repository.RoleMapper.selectByUsername"/>
-        <collection property="permissionList" column="username" ofType="permission"
-                    select="com.taylorsfan.blog.repository.PermissionMapper.selectByUsername"/>
+                    select="com.taylorsfan.blog.repository.BlogMapper.selectAllByUserId"/>
+        <collection property="commentList" column="id" ofType="comment"
+                    select="com.taylorsfan.blog.repository.CommentMapper.selectAllByUserId"/>
+        <collection property="roleNameList" column="username" ofType="string"
+                    select="com.taylorsfan.blog.repository.RoleMapper.selectRoleNameListByUsername"/>
+        <collection property="permissionNameList" column="username" ofType="string"
+                    select="com.taylorsfan.blog.repository.PermissionMapper.selectPermissionNameListByUsername"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, username, password, email, mobile, sex, description, img_url, country, birthday
@@ -48,12 +50,6 @@
     </select>
     <select id="selectMsgByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
         select * from user WHERE id = #{id}
-    </select>
-    <select id="selectAllFanByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select user.* from user WHERE user.id IN (select fan_id from user_fan WHERE user_id = #{id} )
-    </select>
-    <select id="selectAllFocusByUserId" resultMap="BaseResultMap">
-        select user.* from user WHERE user.id IN (select fan_id from user_focus WHERE user_id = #{id} )
     </select>
     <select id="selectOneByUsername" parameterType="string" resultMap="BaseResultMap">
         select * from user WHERE username = #{username}

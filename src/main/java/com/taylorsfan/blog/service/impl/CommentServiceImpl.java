@@ -1,6 +1,5 @@
 package com.taylorsfan.blog.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Comment;
 import com.taylorsfan.blog.repository.CommentMapper;
 import com.taylorsfan.blog.service.CommentService;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -16,11 +14,16 @@ import java.util.Map;
 @Service
 public class CommentServiceImpl implements CommentService {
 
+    private final CommentMapper commentMapper;
+
     @Autowired
-    private CommentMapper commentMapper;
+    public CommentServiceImpl(CommentMapper commentMapper) {
+        this.commentMapper = commentMapper;
+    }
+
 
     @Override
-    public List<Comment> findAll(Map<String, Integer> map) {
+    public List<Comment> findAll(int pageNum, int pageSize) {
         return null;
     }
 

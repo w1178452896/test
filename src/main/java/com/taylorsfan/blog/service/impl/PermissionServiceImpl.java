@@ -1,5 +1,6 @@
 package com.taylorsfan.blog.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Permission;
 import com.taylorsfan.blog.repository.PermissionMapper;
@@ -16,27 +17,32 @@ import java.util.Map;
 @Service
 public class PermissionServiceImpl implements PermissionService {
 
+    private final PermissionMapper permissionMapper;
+
     @Autowired
-    private PermissionMapper permissionMapper;
+    public PermissionServiceImpl(PermissionMapper permissionMapper) {
+        this.permissionMapper = permissionMapper;
+    }
 
 
     @Override
-    public List<Permission> findAll(Map<String, Integer> map) {
-        return null;
+    public List<Permission> findAll(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(permissionMapper.selectAll()).getList();
     }
 
     @Override
     public boolean update(Permission permission) {
-        return false;
+        return permissionMapper.updateByPrimaryKey(permission) != 0;
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        return permissionMapper.deleteByPrimaryKey(id) != 0;
     }
 
     @Override
     public boolean insert(Permission permission) {
-        return false;
+        return permissionMapper.insertSelective(permission) != 0;
     }
 }

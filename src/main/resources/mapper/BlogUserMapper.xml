@@ -14,6 +14,9 @@
     delete from blog_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
+    <delete id="deleteByUserId" parameterType="integer">
+        DELETE FROM blog_user WHERE user_id = #{userId}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.BlogUser">
         insert into blog_user
         <trim prefix="(" suffix=")" suffixOverrides=",">

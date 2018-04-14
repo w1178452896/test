@@ -15,10 +15,6 @@ public interface UserMapper extends BaseMapper<User> {
 
     UserVo selectMsgByPrimaryKey(Integer id);
 
-    List<User> selectAllFanByUserId(Integer id);
-
-    List<User> selectAllFocusByUserId(Integer id);
-
     User selectOneByUsername(String username);
 
     User selectOneByUserNameAndPassword(Map<String, String> map);

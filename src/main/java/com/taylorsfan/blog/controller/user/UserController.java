@@ -38,8 +38,8 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/login")
-    public ResultUtil login(Map<String, String> map) {
-        if (userService.login(map) != null) {
+    public ResultUtil login(String username, String password) {
+        if (userService.login(username, password) != null) {
             return new ResultUtil(200, "success");
         }
         return new ResultUtil(500, "failure");
