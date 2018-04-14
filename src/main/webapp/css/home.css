@@ -77,6 +77,19 @@ body {
 .hot span:nth-child(2) {
     color: #fff008;
 }
+.uIndexHead img{
+    width: 100px;
+    height: 100px;
+}
+.uIndexInfo>ul {
+    margin-top: 20px;
+}
+.uIndexInfo>ul li:not(:last-child) {
+    border-right: solid 1px #b7b2ba;
+}
+.uIndexInfo>ul li p {
+    margin-bottom: 1px;
+}
 @media screen and (max-width: 768px) {
   .authorHead img {
     border-radius: 75px;
@@ -103,6 +116,17 @@ body {
     margin-left: 0px;
     margin-bottom: 40px;
   }
+  .uIndexTop {
+      padding-top: 20px;
+      padding-right: 0px;
+      padding-left: 0px;
+  }
+  .uIndexHead, .uIndexInfo {
+      text-align: center;
+  }
+    .uIndexInfo>ul {
+        margin-top: 10px;
+    }
 }
 
 @media screen and (max-width: 450px){

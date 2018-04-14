@@ -16,7 +16,7 @@
                 <#if userStatus??>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-top: 0px; padding-bottom: 0px;">
-                            <img src="/resources/head.png" class="img-circle""></a>
+                            <img src="/resources/head.png" class="img-circle"></a>
                         <ul class="dropdown-menu dropdown-menu-left">
                             <li ><a href="user-index"><span class="glyphicon glyphicon-home"></span><span>我的主页</span></a></li>
                             <li ><a href="user-info"><span class="glyphicon glyphicon-user"></span><span>个人信息</span></a></li>
