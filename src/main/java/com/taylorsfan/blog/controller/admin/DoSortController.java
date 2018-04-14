@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/sort")
 public class DoSortController implements DoBaseController<Sort> {
 
+    private final SortService sortService;
+
     @Autowired
-    private SortService sortService;
+    public DoSortController(SortService sortService) {
+        this.sortService = sortService;
+    }
 
     @Override
     public String findAll(Model model, @RequestBody int pageNum, @RequestBody int pageSize) {

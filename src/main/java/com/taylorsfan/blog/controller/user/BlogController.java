@@ -13,18 +13,23 @@ import java.util.Map;
  */
 @Controller
 public class BlogController {
+    private final BlogService blogService;
+
     @Autowired
-    private BlogService blogService;
+    public BlogController(BlogService blogService) {
+        this.blogService = blogService;
+    }
 
     /**
      * 显示文章列表
      * @param model 存到model内
-     * @param map pageNum,pageSize,status
      * @return url
      */
     @RequestMapping("/list/blogs")
-    public String checkBlogs(Model model, Map<String, Integer> map) {
-        model.addAttribute("blogList", blogService.findAll(map));
+    public String checkBlogs(Model model, int pageNum, int pageSize) {
+        model.addAttribute("blogList", blogService.findAllNormal(pageNum, pageSize));
         return "list/blog";
     }
+
+
 }

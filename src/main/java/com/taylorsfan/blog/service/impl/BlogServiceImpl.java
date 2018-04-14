@@ -1,14 +1,15 @@
 package com.taylorsfan.blog.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.repository.BlogMapper;
+import com.taylorsfan.blog.repository.BlogUserMapper;
 import com.taylorsfan.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -16,18 +17,36 @@ import java.util.Map;
 @Service
 public class BlogServiceImpl implements BlogService {
 
-    @Autowired
-    private BlogMapper blogMapper;
+    private final BlogMapper blogMapper;
+    private final BlogUserMapper blogUserMapper;
 
+    @Autowired
+    public BlogServiceImpl(BlogMapper blogMapper, BlogUserMapper blogUserMapper) {
+        this.blogMapper = blogMapper;
+        this.blogUserMapper = blogUserMapper;
+    }
 
     @Override
-    public List<Blog> findAll(Map<String, Integer> map) {
-        return null;
+    public List<Blog> findAll(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(blogMapper.selectAll()).getList();
+    }
+
+    @Override
+    public List<Blog> findAllNormal(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(blogMapper.selectAllByStatus(1)).getList();
+    }
+
+    @Override
+    public List<Blog> findAllNeedChecked(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(blogMapper.selectAllByStatus(2)).getList();
     }
 
     @Override
     public boolean update(Blog blog) {
-        return false;
+        return blogMapper.updateByPrimaryKey(blog) != 0;
     }
 
     @Override
@@ -39,4 +58,5 @@ public class BlogServiceImpl implements BlogService {
     public boolean insert(Blog blog) {
         return false;
     }
+
 }

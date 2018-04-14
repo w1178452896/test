@@ -3,13 +3,14 @@ package com.taylorsfan.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.User;
-import com.taylorsfan.blog.repository.UserMapper;
+import com.taylorsfan.blog.model.UserRole;
+import com.taylorsfan.blog.repository.*;
 import com.taylorsfan.blog.service.UserService;
+import com.taylorsfan.blog.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author momo
@@ -18,11 +19,35 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
+    private final UserRoleMapper userRoleMapper;
+    private final BlogUserMapper blogUserMapper;
+    private final UserFocusMapper userFocusMapper;
+    private final UserFanMapper userFanMapper;
+
     @Autowired
-    private UserMapper userMapper;
+    public UserServiceImpl(UserMapper userMapper, RoleMapper roleMapper, PermissionMapper permissionMapper, UserRoleMapper userRoleMapper, BlogUserMapper blogUserMapper, UserFocusMapper userFocusMapper, UserFanMapper userFanMapper) {
+        this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
+        this.permissionMapper = permissionMapper;
+        this.userRoleMapper = userRoleMapper;
+        this.blogUserMapper = blogUserMapper;
+        this.userFocusMapper = userFocusMapper;
+        this.userFanMapper = userFanMapper;
+    }
 
     @Override
-    public User login(Map<String, String> map) {
+    public boolean judgeHaveUserOrNot(String username) {
+        return userMapper.selectOneByUsername(username) != null;
+    }
+
+    @Override
+    public User login(String username, String password) {
+        Map<String, String> map = new HashMap<>(2);
+        map.put("username", username);
+        map.put("password", password);
         return userMapper.selectOneByUserNameAndPassword(map);
     }
 
@@ -32,32 +57,42 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll(Map<String, Integer> map) {
-        PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
+    public UserVo findMsgByUserId(int id) {
+        UserVo userVo = userMapper.selectMsgByPrimaryKey(id);
+        userVo.setFocus(userFocusMapper.count(id));
+        userVo.setFan(userFanMapper.count(id));
+        return userVo;
+    }
+
+    @Override
+    public List<User> findAll(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<User> userList = userMapper.selectAll();
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         return pageInfo.getList();
     }
 
     @Override
-    public List<User> findAllFan(Map<String, Integer> map) {
-        PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
-        List<User> userList = userMapper.selectAllFanByUserId(map.get("id"));
-        PageInfo<User> pageInfo = new PageInfo<>(userList);
-        return pageInfo.getList();
+    public Set<String> findRoleNameList(String username) {
+        return new HashSet<>(roleMapper.selectRoleNameListByUsername(username));
     }
 
     @Override
-    public List<User> findAllFocus(Map<String, Integer> map) {
-        PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
-        List<User> userList = userMapper.selectAllFocusByUserId(map.get("id"));
-        PageInfo<User> pageInfo = new PageInfo<>(userList);
-        return pageInfo.getList();
+    public Set<String> findPermissionNameList(String username) {
+        return new HashSet<>(permissionMapper.selectPermissionNameListByUsername(username));
     }
 
     @Override
-    public boolean judgeHaveUserOrNot(String username) {
-        return userMapper.selectOneByUsername(username) != null;
+    public boolean changeRole(int id, int[] roleIds) {
+        if (userRoleMapper.deleteByUserId(id) != 0) {
+            for (int roleId : roleIds) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(id);
+                userRole.setRoleId(roleId);
+                userRoleMapper.insertSelective(userRole);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -67,11 +102,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean delete(int id) {
-        return userMapper.deleteByPrimaryKey(id) != 0;
+        return userMapper.deleteByPrimaryKey(id) != 0
+                && userRoleMapper.deleteByUserId(id) != 0
+                && userFanMapper.deleteByUserId(id) != 0
+                && userFocusMapper.deleteByUserId(id) != 0
+                && blogUserMapper.deleteByUserId(id) != 0;
     }
 
     @Override
     public boolean insert(User user) {
-        return userMapper.insertSelective(user) != 0;
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(1);
+        if (userMapper.insertSelective(user) != 0) {
+            userRole.setUserId(user.getId());
+            return userRoleMapper.insertSelective(userRole) != 0;
+        }
+        return false;
     }
 }

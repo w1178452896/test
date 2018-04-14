@@ -17,8 +17,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/blog")
 public class DoBlogController implements DoBaseController<Blog> {
+    private final BlogService blogService;
+
     @Autowired
-    private BlogService blogService;
+    public DoBlogController(BlogService blogService) {
+        this.blogService = blogService;
+    }
 
     @Override
     public String findAll(Model model, @RequestBody int pageNum, @RequestBody int pageSize) {

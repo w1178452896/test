@@ -18,8 +18,12 @@ import java.util.List;
 @RequestMapping("/admin/role")
 public class DoRoleController implements DoBaseController<Role> {
 
+    private final RoleService roleService;
+
     @Autowired
-    private RoleService roleService;
+    public DoRoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
 
     @Override

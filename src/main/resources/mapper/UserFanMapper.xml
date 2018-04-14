@@ -18,10 +18,12 @@
         from user_fan
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="count" parameterType="java.lang.String" resultType="int">
-        select COUNT(user_fan.*) from user_fan,user WHERE user.id = user_fan.user_id
-        AND user.username = #{username}
+    <select id="count" parameterType="integer" resultType="int">
+        select COUNT(*) from user_fan WHERE user_id = #{userId}
     </select>
+    <delete id="deleteByUserId">
+        DELETE FROM user_fan WHERE user_id =#{userId}
+    </delete>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from user_fan
         where id = #{id,jdbcType=INTEGER}

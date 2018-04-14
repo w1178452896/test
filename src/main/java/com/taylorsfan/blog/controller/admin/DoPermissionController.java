@@ -18,8 +18,12 @@ import java.util.List;
 @RequestMapping("/admin/permission")
 public class DoPermissionController implements DoBaseController<Permission> {
 
+    private final PermissionService permissionService;
+
     @Autowired
-    private PermissionService permissionService;
+    public DoPermissionController(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
 
 
     @Override

@@ -7,6 +7,8 @@ import com.taylorsfan.blog.model.UserFocus;
  */
 public interface UserFocusMapper extends BaseMapper<UserFocus> {
 
-    int count(String username);
+    int count(int userId);
+
+    int deleteByUserId(int userId);
 
 }

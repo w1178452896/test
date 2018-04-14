@@ -13,6 +13,9 @@
     delete from user_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
+    <delete id="deleteByUserId" parameterType="integer">
+        DELETE FROM user_role WHERE user_id = #{userId}
+    </delete>
     <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.UserRole">
         insert into user_role
         <trim prefix="(" suffix=")" suffixOverrides=",">

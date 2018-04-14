@@ -17,8 +17,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/comment")
 public class DoCommentController implements DoBaseController<Comment> {
+    private final CommentService commentService;
+
     @Autowired
-    private CommentService commentService;
+    public DoCommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
 
     @Override

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -15,28 +16,36 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin/user")
-public class DoUserController implements DoBaseController<User> {
+public class DoUserController {
+
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public DoUserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @Override
+    @RequestMapping("/all")
     public String findAll(Model model, int pageNum, int pageSize) {
-        return null;
+        model.addAttribute("userList", userService.findAll(pageNum, pageSize));
+        return "/list/users";
     }
 
-    @Override
-    public ResultUtil insert(User user) {
-        return null;
+    @ResponseBody
+    @RequestMapping("/resetPassword")
+    public ResultUtil resetPassword(int id) {
+        if (userService.resetPassword(id)) {
+            return new ResultUtil(200, "success");
+        }
+        return new ResultUtil(500, "failure");
     }
 
-    @Override
-    public ResultUtil update(User user) {
-        return null;
-    }
-
-    @Override
-    public ResultUtil delete(int id) {
-        return null;
+    @ResponseBody
+    @RequestMapping("/changeRole")
+    public ResultUtil changeRole(int id, int[] roleIds) {
+        if (userService.changeRole(id, roleIds)) {
+            return new ResultUtil(200, "success");
+        }
+        return new ResultUtil(500, "failure");
     }
 }

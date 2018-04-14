@@ -1,7 +1,6 @@
 package com.taylorsfan.blog.controller.user;
 
 import com.taylorsfan.blog.model.User;
-import com.taylorsfan.blog.service.UserMsgService;
 import com.taylorsfan.blog.service.UserService;
 import com.taylorsfan.blog.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author taylorsfan
  */
@@ -20,14 +16,11 @@ import java.util.Map;
 @RequestMapping("/user/manage/personal")
 @Controller
 public class UserMsgController {
-
     private final UserService userService;
-    private final UserMsgService userMsgService;
 
     @Autowired
-    public UserMsgController(UserService userService, UserMsgService userMsgService) {
+    public UserMsgController(UserService userService) {
         this.userService = userService;
-        this.userMsgService = userMsgService;
     }
 
     /**
@@ -35,19 +28,8 @@ public class UserMsgController {
      */
     @RequestMapping("/")
     public String findUserMsg(Model model, int id) {
-        model.addAttribute("userVo", userMsgService.findMsgByUserId(id));
+        model.addAttribute("userVo", userService.findMsgByUserId(id));
         return "index-user";
-    }
-
-    /**
-     * 显示所有关注人的信息
-     */
-    @RequestMapping("/listAllFan")
-    public String listALlFan(Model model, Map<String, Integer> map) {
-
-        List<User> userVoList = userService.findAllFan(map);
-        model.addAttribute("userVoList", userVoList);
-        return "listAllFan";
     }
 
     /**

@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface PermissionMapper extends BaseMapper<Permission> {
     List<String> selectPermissionNameListByUsername(String username);
+
+
 }

@@ -18,12 +18,16 @@ import java.util.Map;
 @Service
 public class SortServiceImpl implements SortService {
 
+    private final SortMapper sortMapper;
+
     @Autowired
-    private SortMapper sortMapper;
+    public SortServiceImpl(SortMapper sortMapper) {
+        this.sortMapper = sortMapper;
+    }
 
 
     @Override
-    public List<Sort> findAll(Map<String, Integer> map) {
+    public List<Sort> findAll(int pageNum, int pageSize) {
         return null;
     }
 
