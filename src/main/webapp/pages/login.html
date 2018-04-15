@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/fss.js"></script>
+    <script src="../js/fssSet.js"></script>
     <link rel="stylesheet" href="../css/login.css">
     <title>登录</title>
     <style>
@@ -15,7 +17,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="fssSet();">
 <div class="sign hidden-xs">
     <h1><b><a href="/">Blog</a></b></h1>
 </div>
@@ -58,6 +60,10 @@
                 <input type="button" value="登录" name="login" class="btn btn-lg btn-primary btn-block" />
             </form>
         </div>
+    </div>
+</div>
+<div id="container" class="fss">
+    <div id="output" class="fss">
     </div>
 </div>
 </body>

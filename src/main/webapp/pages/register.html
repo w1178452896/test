@@ -8,6 +8,8 @@
   <script src="../js/jquery-3.3.1.min.js"></script>
   <script src="../js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="../css/login.css">
+  <script src="../js/fss.js"></script>
+  <script src="../js/fssSet.js"></script>
   <style>
     .title a[title=register] {
       color: #e88645;
@@ -15,7 +17,7 @@
     }
   </style>
 </head>
-<body>
+<body onload="fssSet();">
 <div class="sign hidden-xs">
   <h1><b><a href="/">Blog</a></b></h1>
 </div>
@@ -65,6 +67,10 @@
         <input type="button" class="btn btn-lg btn-success btn-block" value="注册" name="submit"/>
       </form>
     </div>
+  </div>
+</div>
+<div id="container" class="fss">
+  <div id="output" class="fss">
   </div>
 </div>
 </body>

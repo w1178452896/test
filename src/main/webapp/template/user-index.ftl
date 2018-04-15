@@ -23,7 +23,6 @@
             <ul class="list-inline">
                 <li>
                     <p><span>0</span></p>
-                    <a href="#"></span></a>
                     <button type="button" class="btn btn-default btn-xs" onclick="follow();"><span>关注 ></span></button>
                 </li>
                 <li>
