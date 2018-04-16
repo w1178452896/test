@@ -1,10 +1,10 @@
 <div class="content">
     <div class="text-right">
-        <span>${authorName!"..."}</span>
+        <span>${authorName!"authorName"}</span>
     </div>
     <div class="media">
         <div class="media-body">
-            <div class="media-heading">${title!}</div>
+            <div class="media-heading">${title!"title"}</div>
             <div class="content-p">
                 <p>${content!"文章信息无法显示"}...</p>
             </div>
@@ -17,7 +17,7 @@
                 </div>
             </a>
             <br>
-            <button class="btn btn-default center-block">关注<span class="glyphicon glyphicon-heart"></span></button>
+            <button class="btn btn-default btn-sm center-block"><span class="glyphicon glyphicon-heart" style="color: red"></span> 关注</button>
         </div>
     </div>
     <div.content-info>

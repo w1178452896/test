@@ -12,15 +12,7 @@
             <span class="glyphicon glyphicon-fire"></span>
         </div>
         <div class="hot">
-            <span>7日热门</span>
-            <span class="glyphicon glyphicon-fire"></span>
-        </div>
-        <div class="hot">
-            <span>7日热门</span>
-            <span class="glyphicon glyphicon-fire"></span>
-        </div>
-        <div class="hot">
-            <span>7日热门</span>
+            <span>30日热门</span>
             <span class="glyphicon glyphicon-fire"></span>
         </div>
 </div>

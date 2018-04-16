@@ -18,6 +18,7 @@
         <div class="col-md-8 col-xs-12">
             <#--巨幕-->
             <#include "thumbnail.ftl">
+                <div class="contentTitle"><span>热门文章 ></span></div>
             <#--首页内容-->
             <#include "content.ftl">
         </div>

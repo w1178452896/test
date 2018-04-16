@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>编辑</title>
     <link rel="stylesheet" href="../css/editormd.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
     <script src="../js/editormd.min.js"></script>
     <style>
         .editor {
@@ -16,15 +18,37 @@
 <body>
 <div class="editor">
     <div id="editormd">
-        <textarea style="display:none;">### Hello Editor.md !</textarea>
+        <textarea style="display:none;">### Hello !</textarea>
     </div>
 </div>
 </body>
 <script>
-    $(function() {
+    $(function () {
         var editor = editormd({
-            id   : "editormd",
-            path : "/resources/editor/lib/"
+            id: "editormd",
+            path: "/resources/editor/lib/",
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "main.upload",
+            //editor.md期望得到一个json格式的上传后的返回值，格式是这样的：
+            /*
+            {
+                success : 0 | 1,           // 0 表示上传失败，1 表示上传成功
+                message : "提示的信息，上传成功或上传失败及错误信息等。",
+                url     : "图片地址"        // 上传成功时才返回
+            }
+                      saveHTMLToTextarea : true,
+                      emoji : true,
+                      taskList: true,
+                      /*tocm: true,
+                      tex: true,
+                      flowChart: true,
+                      sequenceDiagram: true,*/
+            toolbarIcons: function () {
+                // Or return editormd.toolbarModes[name]; // full, simple, mini
+                // Using "||" set icons align right.
+                return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "clear", "search", "||", "fullscreen"]
+            },
         });
     });
 </script>

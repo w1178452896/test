@@ -3,6 +3,21 @@
   color: #373737;
   font-weight: bold;
 }
+.write, .write:hover{
+  color: #ffffff;
+}
+.write:hover {
+  text-decoration: none;
+}
+.mynav li button {
+  border-color: #f69581;
+  border-radius: 25px;
+  background: #f69581;
+}
+.mynav li button:hover {
+  background: #de8274;
+  border-color: #de8274;
+}
 @media screen and (min-width: 768px) {
   .navbar {
     border: 0px;

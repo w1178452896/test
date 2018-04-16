@@ -25,7 +25,7 @@
                             <li ><a href="#"><span class="glyphicon glyphicon-log-out"></span><span>退出</span></a></li>
                         </ul>
                     </li>
-                    <li><button class=" btn btn-default navbar-btn"><a href="/pages/editor.html"><span class="glyphicon glyphicon-pencil"></span> 写文章</a></button></li>
+                    <li><button class=" btn btn-default navbar-btn"><a href="/pages/editor.html" class="write"><span class="glyphicon glyphicon-pencil"></span> 写文章</a></button></li>
                 <#else>
                     <li><a href="/pages/login.html">登录</a></li>
                     <li><a href="/pages/register.html">注册</a></li>
