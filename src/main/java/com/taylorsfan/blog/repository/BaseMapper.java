@@ -1,4 +1,4 @@
-package com.taylorsfan.blog.repository.relation;
+package com.taylorsfan.blog.repository;
 
 /**
  * @author taylorsfan

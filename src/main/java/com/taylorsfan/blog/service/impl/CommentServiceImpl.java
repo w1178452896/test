@@ -2,14 +2,13 @@ package com.taylorsfan.blog.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.model.Comment;
 import com.taylorsfan.blog.model.relation.BlogComment;
 import com.taylorsfan.blog.model.relation.UserComment;
 import com.taylorsfan.blog.repository.CommentMapper;
 import com.taylorsfan.blog.repository.UserMapper;
-import com.taylorsfan.blog.repository.relation.BlogCommentMapper;
-import com.taylorsfan.blog.repository.relation.UserCommentMapper;
+import com.taylorsfan.blog.repository.BlogCommentMapper;
+import com.taylorsfan.blog.repository.UserCommentMapper;
 import com.taylorsfan.blog.service.CommentService;
 import com.taylorsfan.blog.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
