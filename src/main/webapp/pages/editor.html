@@ -2,28 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>编辑</title>
     <link rel="stylesheet" href="../css/editormd.min.css">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/editor.css">
     <script src="../js/jquery-3.3.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/editormd.min.js"></script>
-    <style>
-        .editor {
-            width: auto;
-            height: 500px;
-        }
-    </style>
 </head>
 <body>
-<div class="editor">
-    <div id="editormd">
-        <textarea style="display:none;">### Hello !</textarea>
+<div class="container-fluid">
+    <div class="row home">
+        <h1><b><a href="/">Blog</a></b></h1>
+        <h3>
+            <small> 编辑并发布你的文章</small>
+        </h3>
+        <!--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+            Button with data-target
+        </button>
+        <div class="collapse" id="collapseExample">
+            <div class="well">
+                ...
+            </div>
+        </div>-->
+    </div>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 col-xs-12 editor">
+            <div id="editormd">
+                <textarea style="display:none;">### Hello !</textarea>
+            </div>
+        </div>
     </div>
 </div>
 </body>
+
 <script>
     $(function () {
+        // 配置编译器
         var editor = editormd({
             id: "editormd",
             path: "/resources/editor/lib/",
@@ -50,6 +67,8 @@
                 return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "clear", "search", "||", "fullscreen"]
             },
         });
+
+
     });
 </script>
 </html>
