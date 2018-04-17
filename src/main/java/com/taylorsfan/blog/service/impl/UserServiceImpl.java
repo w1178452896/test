@@ -3,8 +3,11 @@ package com.taylorsfan.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.User;
-import com.taylorsfan.blog.model.UserRole;
-import com.taylorsfan.blog.repository.*;
+import com.taylorsfan.blog.model.relation.UserRole;
+import com.taylorsfan.blog.repository.PermissionMapper;
+import com.taylorsfan.blog.repository.RoleMapper;
+import com.taylorsfan.blog.repository.UserMapper;
+import com.taylorsfan.blog.repository.relation.*;
 import com.taylorsfan.blog.service.UserService;
 import com.taylorsfan.blog.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,25 +21,23 @@ import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private final UserMapper userMapper;
-    private final RoleMapper roleMapper;
-    private final PermissionMapper permissionMapper;
-    private final UserRoleMapper userRoleMapper;
-    private final BlogUserMapper blogUserMapper;
-    private final UserFocusMapper userFocusMapper;
-    private final UserFanMapper userFanMapper;
-
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, RoleMapper roleMapper, PermissionMapper permissionMapper, UserRoleMapper userRoleMapper, BlogUserMapper blogUserMapper, UserFocusMapper userFocusMapper, UserFanMapper userFanMapper) {
-        this.userMapper = userMapper;
-        this.roleMapper = roleMapper;
-        this.permissionMapper = permissionMapper;
-        this.userRoleMapper = userRoleMapper;
-        this.blogUserMapper = blogUserMapper;
-        this.userFocusMapper = userFocusMapper;
-        this.userFanMapper = userFanMapper;
-    }
+    private UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
+    @Autowired
+    private PermissionMapper permissionMapper;
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+    @Autowired
+    private BlogUserMapper blogUserMapper;
+    @Autowired
+    private UserFocusMapper userFocusMapper;
+    @Autowired
+    private UserFanMapper userFanMapper;
+    @Autowired
+    private UserBlogMapper userBlogMapper;
+
 
     @Override
     public boolean judgeHaveUserOrNot(String username) {
@@ -56,30 +57,32 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateByPrimaryKeyPassword2Null(id) != 0;
     }
 
-    @Override
-    public UserVo findMsgByUserId(int id) {
-        UserVo userVo = userMapper.selectMsgByPrimaryKey(id);
-        userVo.setFocus(userFocusMapper.count(id));
-        userVo.setFan(userFanMapper.count(id));
-        return userVo;
-    }
 
     @Override
-    public List<User> findAll(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+    public List<UserVo> showAll(Map<String, Integer> map) {
+        PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
         List<User> userList = userMapper.selectAll();
+        List<UserVo> userVoList = new ArrayList<>();
         PageInfo<User> pageInfo = new PageInfo<>(userList);
-        return pageInfo.getList();
+        for (User user : pageInfo.getList()) {
+            UserVo userVo = new UserVo();
+            userVo.setUser(user);
+            userVo.setFanCount(userFanMapper.count(user.getId()));
+            userVo.setFocusCount(userFocusMapper.count(user.getId()));
+            userVo.setBlogCount(userBlogMapper.count(user.getId()));
+            userVoList.add(userVo);
+        }
+        return userVoList;
     }
 
     @Override
-    public Set<String> findRoleNameList(String username) {
-        return new HashSet<>(roleMapper.selectRoleNameListByUsername(username));
+    public Set<String> findRoleNameList(int userId) {
+        return new HashSet<>(roleMapper.selectAllRoleNameByUserId(userId));
     }
 
     @Override
-    public Set<String> findPermissionNameList(String username) {
-        return new HashSet<>(permissionMapper.selectPermissionNameListByUsername(username));
+    public Set<String> findPermissionNameList(int userId) {
+        return new HashSet<>(permissionMapper.selectAllByUserId(userId));
     }
 
     @Override
@@ -89,10 +92,59 @@ public class UserServiceImpl implements UserService {
                 UserRole userRole = new UserRole();
                 userRole.setUserId(id);
                 userRole.setRoleId(roleId);
-                userRoleMapper.insertSelective(userRole);
+                userRoleMapper.insert(userRole);
             }
         }
         return true;
+    }
+
+    @Override
+    public UserVo showUserByBlogId(int blogId) {
+        UserVo userVo = new UserVo();
+        User user = userMapper.selectOneByBlogId(blogId);
+        userVo.setUser(user);
+        userVo.setFanCount(userFanMapper.count(user.getId()));
+        userVo.setFocusCount(userFocusMapper.count(user.getId()));
+        userVo.setBlogCount(userBlogMapper.count(user.getId()));
+        return userVo;
+    }
+
+    @Override
+    public UserVo showUserByCommentId(int commentId) {
+        UserVo userVo = new UserVo();
+        User user = userMapper.selectOneByCommentId(commentId);
+        userVo.setUser(user);
+        userVo.setFanCount(userFanMapper.count(user.getId()));
+        userVo.setFocusCount(userFocusMapper.count(user.getId()));
+        userVo.setBlogCount(userBlogMapper.count(user.getId()));
+        return userVo;
+    }
+
+    @Override
+    public UserVo showUserVoByUserId(int userId) {
+        UserVo userVo = new UserVo();
+        User user = userMapper.selectOneByPrimaryKey(userId);
+        userVo.setUser(user);
+        userVo.setFanCount(userFanMapper.count(user.getId()));
+        userVo.setFocusCount(userFocusMapper.count(user.getId()));
+        userVo.setBlogCount(userBlogMapper.count(user.getId()));
+        return userVo;
+    }
+
+    @Override
+    public User showUserByUserId(int userId) {
+        return userMapper.selectOneByPrimaryKey(userId);
+    }
+
+    @Override
+    public boolean insert(User user) {
+        if (userMapper.insert(user) != 0) {
+            UserRole userRole = new UserRole();
+            userRole.setRoleId(1);
+            userRole.setUserId(user.getId());
+            return userRoleMapper.insert(userRole) != 0;
+        }
+        return false;
     }
 
     @Override
@@ -109,14 +161,4 @@ public class UserServiceImpl implements UserService {
                 && blogUserMapper.deleteByUserId(id) != 0;
     }
 
-    @Override
-    public boolean insert(User user) {
-        UserRole userRole = new UserRole();
-        userRole.setRoleId(1);
-        if (userMapper.insertSelective(user) != 0) {
-            userRole.setUserId(user.getId());
-            return userRoleMapper.insertSelective(userRole) != 0;
-        }
-        return false;
-    }
 }

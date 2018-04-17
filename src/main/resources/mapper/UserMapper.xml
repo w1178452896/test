@@ -13,120 +13,25 @@
         <result column="country" jdbcType="VARCHAR" property="country"/>
         <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
     </resultMap>
-    <resultMap id="VoResultMap" type="userVo">
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="username" jdbcType="VARCHAR" property="username"/>
-        <result column="password" jdbcType="VARCHAR" property="password"/>
-        <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
-        <result column="sex" jdbcType="INTEGER" property="sex"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
-        <result column="country" jdbcType="VARCHAR" property="country"/>
-        <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
-        <collection property="blogList" column="id" ofType="blog"
-                    select="com.taylorsfan.blog.repository.BlogMapper.selectAllByUserId"/>
-        <collection property="commentList" column="id" ofType="comment"
-                    select="com.taylorsfan.blog.repository.CommentMapper.selectAllByUserId"/>
-        <collection property="roleNameList" column="username" ofType="string"
-                    select="com.taylorsfan.blog.repository.RoleMapper.selectRoleNameListByUsername"/>
-        <collection property="permissionNameList" column="username" ofType="string"
-                    select="com.taylorsfan.blog.repository.PermissionMapper.selectPermissionNameListByUsername"/>
-    </resultMap>
     <sql id="Base_Column_List">
         id, username, password, email, mobile, sex, description, img_url, country, birthday
     </sql>
     <select id="selectAll" resultMap="BaseResultMap">
         select * from user
     </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from user
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <select id="selectOneByUserNameAndPassword" parameterType="map" resultMap="BaseResultMap">
-        select * from user WHERE username =#{username} AND password = #{password}
-    </select>
-    <select id="selectMsgByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
-        select * from user WHERE id = #{id}
-    </select>
-    <select id="selectOneByUsername" parameterType="string" resultMap="BaseResultMap">
-        select * from user WHERE username = #{username}
-    </select>
-    <update id="updateByPrimaryKeyPassword2Null" parameterType="java.lang.Integer">
-        update user set password = NULL where id = #{id}
-    </update>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from user
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.User">
-        insert into user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="username != null">
-                username,
-            </if>
-            <if test="password != null">
-                password,
-            </if>
-            <if test="email != null">
-                email,
-            </if>
-            <if test="mobile != null">
-                mobile,
-            </if>
-            <if test="sex != null">
-                sex,
-            </if>
-            <if test="description != null">
-                description,
-            </if>
-            <if test="imgUrl != null">
-                img_url,
-            </if>
-            <if test="country != null">
-                country,
-            </if>
-            <if test="birthday != null">
-                birthday,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="username != null">
-                #{username,jdbcType=VARCHAR},
-            </if>
-            <if test="password != null">
-                #{password,jdbcType=VARCHAR},
-            </if>
-            <if test="email != null">
-                #{email,jdbcType=VARCHAR},
-            </if>
-            <if test="mobile != null">
-                #{mobile,jdbcType=VARCHAR},
-            </if>
-            <if test="sex != null">
-                #{sex,jdbcType=INTEGER},
-            </if>
-            <if test="description != null">
-                #{description,jdbcType=VARCHAR},
-            </if>
-            <if test="imgUrl != null">
-                #{imgUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="country != null">
-                #{country,jdbcType=VARCHAR},
-            </if>
-            <if test="birthday != null">
-                #{birthday,jdbcType=VARCHAR},
-            </if>
-        </trim>
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.User" keyProperty="id" useGeneratedKeys="true">
+        insert into user (id, username, password,
+        email, mobile, sex,
+        description, img_url, country,
+        birthday)
+        values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+        #{description,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR},
+        #{birthday,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.User">
         update user
@@ -141,4 +46,34 @@
         birthday = #{birthday,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="selectOneByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectOneByUserNameAndPassword" parameterType="map" resultMap="BaseResultMap">
+        select * from user WHERE username =#{username} AND password = #{password}
+    </select>
+    <select id="selectOneByUsername" parameterType="string" resultMap="BaseResultMap">
+        select * from user WHERE username = #{username}
+    </select>
+    <select id="selectOneByBlogId" parameterType="integer" resultMap="BaseResultMap">
+        select user.* from user,blog_like WHERE user.id = blog_like.user_id AND blog_like.blog_id = #{blogId} AND
+        blog_like.status = 1
+    </select>
+    <select id="selectOneByCommentId" resultType="user">
+        select user.* from user,comment_user WHERE user.id = comment_user.user_id AND comment_user.comment_id =
+        #{commentId}
+    </select>
+    <select id="selectAllByFanId" resultMap="BaseResultMap">
+        select user.* from user_fan,user WHERE user_fan.user_id = #{fanId} AND user.id = user_fan.user_id
+    </select>
+    <select id="selectAllByFocusId" resultMap="BaseResultMap">
+        select user.* from user,user_focus WHERE user_focus.user_id = #{focusId} AND user.id = user_focus.user_id
+    </select>
+    <update id="updateByPrimaryKeyPassword2Null" parameterType="java.lang.Integer">
+        update user set password = NULL where id = #{id}
+    </update>
+
 </mapper>

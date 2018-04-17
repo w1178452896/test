@@ -1,12 +1,23 @@
 package com.taylorsfan.blog.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.model.Comment;
+import com.taylorsfan.blog.model.relation.BlogComment;
+import com.taylorsfan.blog.model.relation.UserComment;
 import com.taylorsfan.blog.repository.CommentMapper;
+import com.taylorsfan.blog.repository.UserMapper;
+import com.taylorsfan.blog.repository.relation.BlogCommentMapper;
+import com.taylorsfan.blog.repository.relation.UserCommentMapper;
 import com.taylorsfan.blog.service.CommentService;
+import com.taylorsfan.blog.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -14,31 +25,84 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentMapper commentMapper;
-
     @Autowired
-    public CommentServiceImpl(CommentMapper commentMapper) {
-        this.commentMapper = commentMapper;
-    }
-
-
-    @Override
-    public List<Comment> findAll(int pageNum, int pageSize) {
-        return null;
-    }
+    private CommentMapper commentMapper;
+    @Autowired
+    private BlogCommentMapper blogCommentMapper;
+    @Autowired
+    private UserCommentMapper userCommentMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
-    public boolean update(Comment comment) {
+    public List<CommentVo> showAll(Map<String, Integer> map) {
+        List<CommentVo> commentVoList = new ArrayList<>();
+        List<Comment> commentList = new ArrayList<>();
+        PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
+        if (map.containsKey("status")) {
+            if (map.containsKey("userId")) {
+                /*
+                 * 根据用户查询评论
+                 */
+                commentList = commentMapper.selectAllByUserId(map.get("userId"));
+            }
+            if (map.containsKey("blogId")) {
+                /*
+                 * 根据文章查询评论
+                 */
+                commentList = commentMapper.selectAllByBlogId(map.get("blogId"));
+            }
+            if (map.containsKey("commentId")) {
+                /*
+                 * 根据评论查询评论
+                 */
+                commentList = commentMapper.selectAllByCommentId(map.get("commentId"));
+            }
+        } else {
+            commentList = commentMapper.selectAll();
+        }
+        PageInfo<Comment> pageInfo = new PageInfo<>(commentList);
+        for (Comment comment : pageInfo.getList()) {
+            CommentVo commentVo = new CommentVo();
+            commentVo.setComment(comment);
+            commentVo.setCommentUser(userMapper.selectOneByCommentId(comment.getId()));
+            if (comment.getParentId() == 0) {
+                commentVo.setBeCommentedUser(null);
+            }
+            commentVo.setBeCommentedUser(userMapper.selectOneByCommentId(comment.getParentId()));
+            commentVoList.add(commentVo);
+        }
+        return commentVoList;
+    }
+
+    @Override
+    public boolean insert(CommentVo commentVo) {
+        if (commentMapper.insert(commentVo.getComment()) != 0) {
+            UserComment userComment = new UserComment();
+            BlogComment blogComment = new BlogComment();
+            userComment.setCommentId(commentVo.getComment().getId());
+            userComment.setUserId(commentVo.getCommentUser().getId());
+            blogComment.setBlogId(commentVo.getBlog().getId());
+            blogComment.setCommentId(commentVo.getComment().getId());
+            return userCommentMapper.insert(userComment) != 0
+                    && blogCommentMapper.insert(blogComment) != 0;
+        }
         return false;
     }
 
     @Override
-    public boolean delete(int id) {
-        return false;
+    public boolean deleteByCommentId(int commentId) {
+        return commentMapper.updateByCommentId(commentId) != 0;
     }
 
     @Override
-    public boolean insert(Comment comment) {
-        return false;
+    public boolean deleteByUserId(int userId) {
+        return commentMapper.updateByUserId(userId) != 0;
     }
+
+    @Override
+    public boolean deleteByBlogId(int blogId) {
+        return commentMapper.deleteByBlogId(blogId) != 0;
+    }
+
 }

@@ -14,63 +14,38 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select * from comment
     </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from comment
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
+        select * from comment WHERE id = #{id}
     </select>
-    <select id="selectAllByUserId" resultType="comment">
-        select content.* from comment,comment_user WHERE comment_user.user_id = #{userId}
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment (id, create_time, content,
+        status, parent_id)
+        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER})
+    </insert>
+    <select id="selectAllByUserId" parameterType="integer" resultMap="BaseResultMap">
+        select comment.* from comment,comment_user WHERE comment_user.user_id = #{userId}
         AND comment_user.comment_id = comment.id
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from comment
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectAllByBlogId" parameterType="integer" resultMap="BaseResultMap">
+        select comment.* FROM comment,blog_comment WHERE blog_comment.blog_id = #{blogId}
+        AND comment.parent_id = 0
+    </select>
+    <select id="selectAllByCommentId" parameterType="integer" resultMap="BaseResultMap">
+        select * from comment WHERE parent_id = #{commentId}
+    </select>
+    <delete id="deleteByBlogId" parameterType="integer">
+        DELETE FROM comment WHERE id IN (select comment_id from blog_comment WHERE blog_comment.blog_id = #{blogId})
     </delete>
-    <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Comment">
-        insert into comment
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="content != null">
-                content,
-            </if>
-            <if test="status != null">
-                status,
-            </if>
-            <if test="parentId != null">
-                parent_id,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=VARCHAR},
-            </if>
-            <if test="content != null">
-                #{content,jdbcType=VARCHAR},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=INTEGER},
-            </if>
-            <if test="parentId != null">
-                #{parentId,jdbcType=INTEGER},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Comment">
-        update comment
-        set create_time = #{createTime,jdbcType=VARCHAR},
-        content = #{content,jdbcType=VARCHAR},
-        status = #{status,jdbcType=INTEGER},
-        parent_id = #{parentId,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
+    <update id="updateByCommentId" parameterType="integer">
+        UPDATE comment SET
+        content = '此评论已被删除'
+        WHERE id = #{commentId}
     </update>
+    <update id="updateByUserId" parameterType="integer">
+        UPDATE comment SET
+        content = '此用户已被删除！'
+        WHERE id IN (select comment_id from comment_user WHERE user_id = #{userId})
+    </update>
+
 </mapper>

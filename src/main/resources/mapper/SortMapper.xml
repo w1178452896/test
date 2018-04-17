@@ -11,34 +11,22 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select * from sort
     </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectOneByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sort
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectOneByBlogId" parameterType="integer" resultMap="BaseResultMap">
+        select sort.* from sort,sort_blog WHERE blog_id = #{blogId} AND sort.id = sort_blog.sort_id
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sort
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Sort">
-        insert into sort
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="sortName != null">
-                sort_name,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="sortName != null">
-                #{sortName,jdbcType=VARCHAR},
-            </if>
-        </trim>
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.Sort" useGeneratedKeys="true" keyProperty="id">
+        insert into sort (id, sort_name)
+        values (#{id,jdbcType=INTEGER}, #{sortName,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Sort">
         update sort

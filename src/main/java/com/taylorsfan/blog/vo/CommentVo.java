@@ -1,48 +1,55 @@
 package com.taylorsfan.blog.vo;
 
-import com.taylorsfan.blog.model.Comment;
 
-import java.util.List;
+import com.taylorsfan.blog.model.Blog;
+import com.taylorsfan.blog.model.Comment;
+import com.taylorsfan.blog.model.User;
+
 
 /**
  * @author momo
  */
 public class CommentVo {
+    private Blog blog;
+    private Comment comment;
+    /**
+     * 对应用户
+     */
+    private User commentUser;
+    /**
+     * 评论的对象
+     */
+    private User beCommentedUser;
 
-    private int id;
-    private String createTime;
-    private String content;
-    private List<Comment> commentList;
-
-    public int getId() {
-        return id;
+    public Comment getComment() {
+        return comment;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public User getCommentUser() {
+        return commentUser;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCommentUser(User commentUser) {
+        this.commentUser = commentUser;
     }
 
-    public String getContent() {
-        return content;
+    public User getBeCommentedUser() {
+        return beCommentedUser;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setBeCommentedUser(User beCommentedUser) {
+        this.beCommentedUser = beCommentedUser;
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
+    public Blog getBlog() {
+        return blog;
     }
 
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
+    public void setBlog(Blog blog) {
+        this.blog = blog;
     }
 }

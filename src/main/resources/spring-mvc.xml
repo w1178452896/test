@@ -18,9 +18,6 @@
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/css/**" location="/css/"/>
     <mvc:resources mapping="/fonts/**" location="/resources/fonts/"/>
-    <mvc:resources mapping="/pages/**" location="/pages/"/>
-    <mvc:resources mapping="/images/**" location="/resources/images/"/>
-
     <!--ViewResolver 视图解析器-->
 
 

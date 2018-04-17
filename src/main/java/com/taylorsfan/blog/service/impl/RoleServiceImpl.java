@@ -25,7 +25,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> findAll(int pageNum, int pageSize) {
+    public List<Role> showAll(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         return new PageInfo<>(roleMapper.selectAll()).getList();
     }
@@ -36,12 +36,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Integer id) {
         return roleMapper.deleteByPrimaryKey(id) != 0;
     }
 
     @Override
     public boolean insert(Role role) {
-        return roleMapper.insertSelective(role) != 0;
+        return roleMapper.insert(role) != 0;
     }
 }

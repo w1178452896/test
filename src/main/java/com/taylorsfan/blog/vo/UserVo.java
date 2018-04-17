@@ -1,8 +1,6 @@
 package com.taylorsfan.blog.vo;
 
-import com.taylorsfan.blog.model.Blog;
-import com.taylorsfan.blog.model.Comment;
-import com.taylorsfan.blog.model.User;
+import com.taylorsfan.blog.model.*;
 
 import java.util.List;
 
@@ -11,77 +9,51 @@ import java.util.List;
  * @author taylorsfan
  */
 
-public class UserVo extends User {
-    private int focus;
-    private int fan;
-    private List<String> roleNameList;
-    private List<String> permissionNameList;
-    private List<User> focusList;
-    private List<User> fanList;
-    private List<Blog> blogList;
-    private List<Comment> commentList;
+public class UserVo {
+    private User user;
+    private int focusCount;
+    private int fanCount;
+    private int blogCount;
+    private List<Role> roleList;
 
-    public int getFocus() {
-        return focus;
+    public User getUser() {
+        return user;
     }
 
-    public void setFocus(int focus) {
-        this.focus = focus;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getFan() {
-        return fan;
+    public int getFocusCount() {
+        return focusCount;
     }
 
-    public void setFan(int fan) {
-        this.fan = fan;
+    public void setFocusCount(int focusCount) {
+        this.focusCount = focusCount;
     }
 
-    public List<String> getRoleNameList() {
-        return roleNameList;
+    public int getFanCount() {
+        return fanCount;
     }
 
-    public void setRoleNameList(List<String> roleNameList) {
-        this.roleNameList = roleNameList;
+    public void setFanCount(int fanCount) {
+        this.fanCount = fanCount;
     }
 
-    public List<String> getPermissionNameList() {
-        return permissionNameList;
+    public int getBlogCount() {
+        return blogCount;
     }
 
-    public void setPermissionNameList(List<String> permissionNameList) {
-        this.permissionNameList = permissionNameList;
+    public void setBlogCount(int blogCount) {
+        this.blogCount = blogCount;
     }
 
-    public List<User> getFocusList() {
-        return focusList;
+    public List<Role> getRoleList() {
+        return roleList;
     }
 
-    public void setFocusList(List<User> focusList) {
-        this.focusList = focusList;
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
     }
 
-    public List<User> getFanList() {
-        return fanList;
-    }
-
-    public void setFanList(List<User> fanList) {
-        this.fanList = fanList;
-    }
-
-    public List<Blog> getBlogList() {
-        return blogList;
-    }
-
-    public void setBlogList(List<Blog> blogList) {
-        this.blogList = blogList;
-    }
-
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-    }
 }

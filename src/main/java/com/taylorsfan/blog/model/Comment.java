@@ -1,5 +1,8 @@
 package com.taylorsfan.blog.model;
 
+/**
+ * @author taylorsfan
+ */
 public class Comment {
     private Integer id;
 
@@ -7,7 +10,7 @@ public class Comment {
 
     private String content;
 
-    private Integer status;
+    private String status;
 
     private Integer parentId;
 
@@ -35,11 +38,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

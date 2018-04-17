@@ -11,43 +11,34 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select * from permission
     </select>
-    <select id="selectByPrimaryKey" parameterType="integer" resultMap="BaseResultMap">
+    <select id="selectOneByPrimaryKey" parameterType="integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from permission
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectPermissionNameListByUsername" parameterType="string" resultType="string">
-        SELECT DISTINCT permission.permission_name permissionName FROM user, user_role, role, role_permission, permission
-WHERE username = #{username} AND user.id = user_role.user_id AND user_role.role_id = role.id
-    AND role.id = role_permission.role_id AND role_permission.permission_id = permission.id
-    </select>
     <delete id="deleteByPrimaryKey" parameterType="integer">
         delete from permission
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insertSelective" parameterType="permission">
-        insert into permission
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="permissionName != null">
-                permission_name,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="permissionName != null">
-                #{permissionName,jdbcType=VARCHAR},
-            </if>
-        </trim>
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.Permission" keyProperty="id" useGeneratedKeys="true">
+        insert into permission (id, permission_name)
+        values (#{id,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="permission">
         update permission
         set permission_name = #{permissionName,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="selectAllByRoleId" parameterType="integer" resultMap="BaseResultMap">
+        select permission.* from role_permission,permission WHERE role_permission.role_id = #{roleId}
+        AND permission.id = role_permission.permission_id
+    </select>
+    <select id="selectAllByUserId" parameterType="integer" resultType="string">
+        select DISTINCT permission.permission_name permissionName
+        from user_role,role,role_permission,permission
+        WHERE user_id = 1 AND user_role.role_id = role.id
+        AND role.id= role_permission.role_id
+        AND permission.id = role_permission.permission_id
+    </select>
 </mapper>

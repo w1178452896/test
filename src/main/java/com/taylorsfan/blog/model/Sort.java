@@ -1,5 +1,8 @@
 package com.taylorsfan.blog.model;
 
+/**
+ * @author taylorsfan
+ */
 public class Sort {
     private Integer id;
 

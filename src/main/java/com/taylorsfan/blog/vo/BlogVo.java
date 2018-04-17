@@ -1,58 +1,59 @@
 package com.taylorsfan.blog.vo;
 
-import java.util.List;
+import com.taylorsfan.blog.model.Blog;
+import com.taylorsfan.blog.model.Sort;
+import com.taylorsfan.blog.model.User;
 
 /**
- * @author momo
+ * @author wang
  */
 public class BlogVo {
+    /**
+     * 博客
+     */
+    private Blog blog;
+    /**
+     * 对应一个用户
+     */
+    private User user;
+    /**
+     * 分类
+     */
+    private Sort sort;
+    /**
+     * 点赞总数
+     */
+    private Integer countUser;
 
-    private int id;
-    private String title;
-    private String createTime;
-    private String content;
-    //评论
-    //用户的信息
-
-    private List<CommentVo> commentVoList;
-
-    public int getId() {
-        return id;
+    public Blog getBlog() {
+        return blog;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBlog(Blog blog) {
+        this.blog = blog;
     }
 
-    public String getTitle() {
-        return title;
+    public Integer getCountUser() {
+        return countUser;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCountUser(Integer countUser) {
+        this.countUser = countUser;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public User getUser() {
+        return user;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getContent() {
-        return content;
+    public Sort getSort() {
+        return sort;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public List<CommentVo> getCommentVoList() {
-        return commentVoList;
-    }
-
-    public void setCommentVoList(List<CommentVo> commentVoList) {
-        this.commentVoList = commentVoList;
+    public void setSort(Sort sort) {
+        this.sort = sort;
     }
 }

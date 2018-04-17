@@ -11,42 +11,31 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select * from role
     </select>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectOneByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from role
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectRoleNameListByUsername" resultType="java.lang.String">
-        select DISTINCT role.role_name roleName from role,user,user_role WHERE user.username = #{username}
-    AND user.id = user_role.user_id AND user_role.role_id = role.id;
-    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from role
         where id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insertSelective" parameterType="com.taylorsfan.blog.model.Role">
-        insert into role
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="roleName != null">
-                role_name,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="roleName != null">
-                #{roleName,jdbcType=VARCHAR},
-            </if>
-        </trim>
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.Role" useGeneratedKeys="true" keyProperty="id">
+        insert into role (id, role_name)
+        values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Role">
         update role
         set role_name = #{roleName,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <select id="selectAllByUserId" parameterType="integer" resultMap="BaseResultMap">
+        select role.* from role,user_role
+        WHERE user_id = #{userId} AND user_role.role_id = role.id
+    </select>
+    <select id="selectAllRoleNameByUserId" parameterType="integer" resultType="string">
+        select role.role_name roleName from role,user_role
+        WHERE user_role.user_id =#{userId} AND user_role.role_id = role.id
+    </select>
 </mapper>

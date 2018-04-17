@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author taylorsfan
@@ -26,9 +25,11 @@ public class PermissionServiceImpl implements PermissionService {
 
 
     @Override
-    public List<Permission> findAll(int pageNum, int pageSize) {
+    public List<Permission> showAll(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        return new PageInfo<>(permissionMapper.selectAll()).getList();
+        List<Permission> permissionList = permissionMapper.selectAll();
+        PageInfo<Permission> pageInfo = new PageInfo<>();
+        return pageInfo.getList();
     }
 
     @Override
@@ -37,12 +38,12 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Integer id) {
         return permissionMapper.deleteByPrimaryKey(id) != 0;
     }
 
     @Override
     public boolean insert(Permission permission) {
-        return permissionMapper.insertSelective(permission) != 0;
+        return permissionMapper.insert(permission) != 0;
     }
 }

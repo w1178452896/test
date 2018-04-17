@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taylorsfan.blog.repository.relation.BlogUserMapper">
+    <resultMap id="BaseResultMap" type="com.taylorsfan.blog.model.relation.BlogUser">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="blog_id" jdbcType="INTEGER" property="blogId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, blog_id, user_id
+    </sql>
+    <delete id="deleteByUserId" parameterType="integer">
+        DELETE FROM blog_like WHERE user_id = #{userId}
+    </delete>
+    <delete id="deleteByBlogId" parameterType="integer">
+        DELETE FROM blog_like WHERE blog_id = #{blogId}
+    </delete>
+    <select id="count" parameterType="integer" resultType="integer">
+        select COUNT (*) from blog_user WHERE blog_id = #{blogId}
+    </select>
+    <insert id="insert" parameterType="com.taylorsfan.blog.model.relation.BlogUser" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into blog_user (id, blog_id, user_id)
+        values (#{id,jdbcType=INTEGER}, #{blogId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER})
+    </insert>
+    <select id="selectAllByBlogId" parameterType="integer" resultMap="BaseResultMap">
+        select * from blog_user WHERE blog_id = #{blogId}
+    </select>
+</mapper>
