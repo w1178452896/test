@@ -20,7 +20,7 @@
             <#include "thumbnail.ftl">
                 <div class="contentTitle"><span>热门文章 ></span></div>
             <#--首页内容-->
-            <#include "list/blogVos.ftl">
+            <#include "content.ftl">
         </div>
         <div class="col-md-3 hidden-sm hidden-xs">
             <#--右侧-->

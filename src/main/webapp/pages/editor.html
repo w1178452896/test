@@ -17,7 +17,7 @@
         border-radius: 8px;
     }
 </style>
-<body>
+<body class="baitian">
 <div class="container-fluid">
     <div class="row home">
         <h1><b><a href="/">Blog</a></b></h1>
@@ -37,14 +37,14 @@
     <div class="setting">
         <span class="glyphicon glyphicon-edit" style="color: #f9f9f9; font-size: 30px; padding: 13px;"></span>
         <div class="writeHelp">
-            <h4 class="text-center">设置</h4>
-            <div class="form-group">
+            <h4 class="text-center"><span class="glyphicon glyphicon-cog"></span> 设置</h4>
+            <div class="form-group" style="margin-bottom: 30px">
                 <label>主题</label>
                 <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default active">
+                    <label class="btn btn-default active" onclick="chooseTheme('sun');">
                         <input type="radio" name="options" id="sun" autocomplete="off" checked>白天
                     </label>
-                    <label class="btn btn-default">
+                    <label class="btn btn-default" onclick="chooseTheme('moon')">
                         <input type="radio" name="options" id="moon" autocomplete="off">黑夜
                     </label>
                 </div>
@@ -56,13 +56,20 @@
             <div class="form-group">
                 <label for="sort">文章分类</label>
                 <select class="form-control" id="sort">
-                    <option value="">JAVA</option>
-                    <option value="">C++</option>
-                    <option value="">生活</option>
-                    <option value="">随笔</option>
+                    <option value="">+ 新建分类</option>
+                    <option value="JAVA" selected="selected">JAVA</option>
+                    <option value="C++">C++</option>
+                    <option value="生活">生活</option>
+                    <option value="随笔">随笔</option>
                 </select>
             </div>
-            <button class="btn btn-primary center-block" id="share"><span class="glyphicon glyphicon-share"></span> 发布文章</button>
+            <div style="padding-bottom: 20px; margin-top: 150px" class="text-center">
+                <a href="javascript:$.proxy(editor.toolbarHandlers.help, editor)();"><span>Markdown使用帮助</span></a>
+            </div>
+            <div class="btn-group pull-right" role="group">
+                <button type="button" class="btn btn-default" id="save" onclick="savelocal();"><span class="glyphicon glyphicon-floppy-saved"></span> 保存</button>
+                <button type="button" class="btn btn-default" id="share"><span class="glyphicon glyphicon-share-alt"></span> 发布</button>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -76,9 +83,11 @@
 </body>
 
 <script>
+    var editor;
     $(function () {
+        getlocal();
         // 配置编译器
-        var editor = editormd({
+            editor = editormd({
             id: "editormd",
             path: "/resources/editor/lib/",
             imageUpload: true,
@@ -104,8 +113,52 @@
                 return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "clear", "search", "||", "watch", "preview", "fullscreen"]
             },
         });
-
-
+        
     });
+    
+    //改变主题
+    function chooseTheme(o) {
+        if (o == 'moon') {
+            editor.setTheme('dark');
+            editor.setCodeMirrorTheme('lesser-dark');
+            editor.setPreviewTheme('dark');
+            $('body').attr('class', 'heiye');
+        }
+        else {
+            editor.setTheme('default');
+            editor.setCodeMirrorTheme('default');
+            editor.setPreviewTheme('default');
+            $('body').attr('class', 'baitian');
+        }
+    }
+    
+    //保存到本地
+    function savelocal() {
+        var source = editor.getMarkdown();
+        var title = $('#title').val();
+        var sort = $('#sort').val();
+        var articleDate = {title:title,sort:sort,source:source};
+        window.localStorage.setItem('articleDate', JSON.stringify(articleDate));
+        if (localStorage.getItem('articleDate') == null) {
+            alert('保存失败请重试');
+        } else {
+            alert("保存成功！");
+        }
+    }
+    
+    //从本地读取
+    function getlocal() {
+        if (localStorage.getItem('articleDate') != null) {
+            var temp, source, title, sort;
+            temp = localStorage.getItem('articleDate');
+            var articleDate = JSON.parse(temp);
+            source = articleDate.source;
+            title = articleDate.title;
+            sort = articleDate.sort;
+            $('#title').val(title);
+            $('#sort').val(sort);
+            $('textarea').val(source);
+        }
+    }
 </script>
 </html>

@@ -1,11 +1,15 @@
 body {
     min-width: 360px;
     min-height: 949px;
+}
+.baitian {
     background: linear-gradient(to bottom, #8767cf, #348ac7); /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to bottom, #8767cf, #348ac7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background: linear-gradient(to bottom, #8767cf, #348ac7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-
+.heiye {
+    background: #1e1e1e;
+}
 .home {
     padding: 40px 0 30px  50px;
 }
@@ -16,7 +20,7 @@ body {
     margin-left: 10px;
 }
 h3 small {
-    color: #efeaf2;
+    color: #f4eff7;
 }
 .home a, .home a:hover, .home a:active {
     text-decoration: none;
@@ -66,15 +70,12 @@ h3 small {
 }
 .writeHelp h4 {
     font-weight: bold;
-    padding-bottom: 5px;
-    border-bottom: solid 1px #d2d2d2;
+    padding-bottom: 15px;
+    /*border-bottom: solid 1px #d2d2d2;*/
     color: #f9825f;
 }
-.writeHelp div[class=form-group], .writeHelp .btn-group {
-    padding: 5px 30px;
-}
-#share {
-    margin-top: 180px;
+.writeHelp div {
+    padding: 0 30px;
 }
 @media screen and (max-width: 768px){
     .home {
