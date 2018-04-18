@@ -1,8 +1,8 @@
 body {
     min-width: 360px;
     min-height: 949px;
-    background: -webkit-linear-gradient(to bottom, #7474bf, #348ac7); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #7474bf, #348ac7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to bottom, #7979cf, #348ac7); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #7979cf, #348ac7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .home {
@@ -25,15 +25,43 @@ h3 small {
     height: 780px;
     /*padding-top: 20px;*/
 }
+@keyframes settingframes {
+    50% {background: #c18ce7
+    }
+    100% {background: #ffffff}
+}
 .setting {
     position: fixed;
     z-index: 1000;
     top: 140px;
-    left: 70px;
+    left: 50px;
     width: 56px;
     height: 56px;
     border-radius: 28px;
     background: #54dee7;
+    transition: width 0.2s 0.3s, height 0.2s 0.3s, background 0.2s 0.3s, border-radius 0.1s 0.3s, left 0.3s;
+    /*animation: settingframes 10s infinite alternate;*/
+    overflow: hidden;
+}
+.writeHelp {
+    position: absolute;
+    z-index: 1100;
+    top: 0px;
+    left: 0px;
+    width: 280px;
+    height: 500px;
+    opacity: 0;
+    transition: opacity 0.1s 0.55s;
+}
+.writeHelp:hover {
+    opacity: 1;
+}
+.setting:hover {
+    left: 30px;
+    width: 280px;
+    height: 500px;
+    border-radius: 10px;
+    background: #f9f9f9;
 }
 @media screen and (max-width: 768px){
     .home {

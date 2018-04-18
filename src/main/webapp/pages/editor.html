@@ -22,7 +22,7 @@
     <div class="row home">
         <h1><b><a href="/">Blog</a></b></h1>
         <h3>
-            <small> 编辑并发布你的文章</small>
+            <small><i>让你专注写作</i></small>
         </h3>
         <!--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
                 aria-expanded="false" aria-controls="collapseExample">
@@ -34,7 +34,12 @@
             </div>
         </div>-->
     </div>
-    <div class="setting"></div>
+    <div class="setting">
+        <span class="glyphicon glyphicon-edit" style="color: #f9f9f9; font-size: 30px; padding: 13px;"></span>
+        <div class="writeHelp">
+            <h4 class="text-center">写作助手</h4>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 editor">
             <div id="editormd">
@@ -71,7 +76,7 @@
             toolbarIcons: function () {
                 // Or return editormd.toolbarModes[name]; // full, simple, mini
                 // Using "||" set icons align right.
-                return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "watch", "preview", "clear", "search", "||", "fullscreen"]
+                return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "clear", "search", "||", "watch", "preview", "fullscreen"]
             },
         });
 
