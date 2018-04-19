@@ -2,18 +2,11 @@ package com.taylorsfan.blog.service;
 
 import com.taylorsfan.blog.model.Sort;
 
-import java.util.List;
-
 /**
  * @author taylorsfan
  */
-public interface SortService {
-    List<Sort> showAll(int pageNum, int pageSize);
+public interface SortService extends BaseService<Sort> {
 
-    boolean update(Sort sort);
-
-    boolean delete(int id);
-
-    boolean insert(Sort sort);
+    Sort showSortByBlogId(int blogId);
 
 }

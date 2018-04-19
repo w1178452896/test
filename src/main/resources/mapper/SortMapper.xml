@@ -5,32 +5,29 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="sort_name" jdbcType="VARCHAR" property="sortName"/>
     </resultMap>
-    <sql id="Base_Column_List">
-        id, sort_name
-    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
-        select * from sort
+        SELECT * FROM sort
     </select>
-    <select id="selectOneByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from sort
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
+        SELECT *
+        FROM sort
+        WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <select id="selectOneByBlogId" parameterType="integer" resultMap="BaseResultMap">
-        select sort.* from sort,sort_blog WHERE blog_id = #{blogId} AND sort.id = sort_blog.sort_id
+    <select id="selectOneByBlogId" resultMap="BaseResultMap">
+        SELECT sort.* FROM sort,sort_blog
+        WHERE blog_id=#{blogId} AND sort.id=sort_blog.sort_id
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from sort
-        where id = #{id,jdbcType=INTEGER}
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM sort
+        WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Sort" useGeneratedKeys="true" keyProperty="id">
-        insert into sort (id, sort_name)
-        values (#{id,jdbcType=INTEGER}, #{sortName,jdbcType=VARCHAR})
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sort (sort_name)
+        VALUES (#{sort.sortName,jdbcType=VARCHAR})
     </insert>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Sort">
-        update sort
-        set sort_name = #{sortName,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
+    <update id="updateByPrimaryKey">
+        UPDATE sort
+        SET sort_name = #{sort.sortName,jdbcType=VARCHAR}
+        WHERE id=#{sort.id,jdbcType=INTEGER}
     </update>
 </mapper>

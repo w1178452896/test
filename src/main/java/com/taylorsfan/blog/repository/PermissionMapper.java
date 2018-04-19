@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Permission;
 import com.taylorsfan.blog.model.Permission;
 import com.taylorsfan.blog.model.Sort;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,15 +15,15 @@ public interface PermissionMapper {
 
     List<Permission> selectAll();
 
-    Permission selectOneByPrimaryKey(Integer id);
+    Permission selectOneByPrimaryKey(@Param("id") int id);
 
-    Integer deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(@Param("id") int id);
 
-    Integer insert(Permission permission);
+    int insert(@Param("permission") Permission permission);
 
-    Integer updateByPrimaryKey(Permission permission);
+    int updateByPrimaryKey(@Param("permission") Permission permission);
 
-    List<Permission> selectAllByRoleId(int permissionId);
+    List<Permission> selectAllByRoleId(@Param("roleId") int permissionId);
 
-    List<String> selectAllByUserId(int userId);
+    List<Permission> selectAllByUserId(@Param("userId") int userId);
 }

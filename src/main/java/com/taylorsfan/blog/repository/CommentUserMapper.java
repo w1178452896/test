@@ -1,14 +1,19 @@
 package com.taylorsfan.blog.repository;
 
 import com.taylorsfan.blog.model.relation.CommentUser;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author taylorsfan
  */
-public interface CommentUserMapper extends BaseMapper<CommentUser> {
+public interface CommentUserMapper {
 
-    Integer deleteByUserId(Integer userId);
+    int insert(@Param("commentUser") CommentUser commentUser);
 
-    Integer deleteByCommentId(Integer commentId);
+    int countUser(@Param("id") int id);
+
+    int deleteByUserId(@Param("userId") int userId);
+
+    int deleteByCommentId(@Param("commentId") int commentId);
 
 }

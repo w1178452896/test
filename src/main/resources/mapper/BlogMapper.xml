@@ -8,56 +8,75 @@
         <result column="content" jdbcType="VARCHAR" property="content"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
-    <sql id="Base_Column_List">
-        id, create_time, title, content, status
-    </sql>
-    <select id="selectAll" resultMap="BaseResultMap">
-        select * from blog
+    <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM blog
+        WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <select id="selectOneByPrimaryKey" parameterType="integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from blog
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="integer">
-        delete from blog
-        where id = #{id,jdbcType=INTEGER}
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM blog
+        WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Blog" keyProperty="id" useGeneratedKeys="true">
-        insert into blog (id, create_time, title,
-        content, status)
-        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
-        #{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO blog (create_time,title,content,status)
+        VALUES (#{blog.createTime,jdbcType=VARCHAR},#{blog.title,jdbcType=VARCHAR},
+        #{blog.content,jdbcType=VARCHAR},#{blog.status,jdbcType=INTEGER})
     </insert>
-    <update id="updateByPrimaryKey" parameterType="blog">
-        update blog
-        set create_time = #{createTime,jdbcType=VARCHAR},
-        title = #{title,jdbcType=VARCHAR},
-        content = #{content,jdbcType=VARCHAR},
-        status = #{status,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
+    <update id="updateByPrimaryKey">
+        UPDATE blog
+        SET create_time = #{blog.createTime,jdbcType=VARCHAR},
+        title = #{blog.title,jdbcType=VARCHAR},
+        content = #{blog.content,jdbcType=VARCHAR},
+        status = #{blog.status,jdbcType=INTEGER}
+        WHERE id=#{blog.id,jdbcType=INTEGER}
     </update>
-    <select id="selectAllByUserId" parameterType="integer" resultMap="BaseResultMap">
-        select blog.* from blog,blog_like WHERE blog_like.blog_id = blog.id AND
-        blog_like.user_id = #{userId}
-    </select>
-    <select id="selectAllByStatus" parameterType="integer" resultMap="BaseResultMap">
-        select * from blog WHERE status = #{status}
-    </select>
-    <select id="selectAllBySortId" parameterType="integer" resultMap="BaseResultMap">
-        select blog.* from blog,sort_blog WHERE sort_blog.sort_id =#{sortId} AND sort_blog.blog_id = blog.id
+
+    <select id="selectAllBySortId" resultMap="BaseResultMap">
+        SELECT blog.* FROM blog,sort_blog
+        WHERE sort_blog.sort_id=#{sortId}
+        AND sort_blog.blog_id=blog.id
     </select>
     <select id="selectOneByCommentId" resultMap="BaseResultMap">
-        select blog.* from blog,blog_comment WHERE blog.id = blog_comment.blog_id AND blog_comment.comment_id =
-        #{commentId}
+        SELECT blog.* FROM blog,blog_comment
+        WHERE blog.id=blog_comment.blog_id
+        AND blog_comment.comment_id=#{commentId}
     </select>
-    <select id="selectAllByUserIdAndStatus" parameterType="map" resultMap="BaseResultMap">
-        select blog.* from blog,blog_like WHERE blog_like.blog_id = blog.id AND user_id = #{userId} AND blog.status =
-        #{status}
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM blog
     </select>
-    <select id="selectAllCollectByUserIdAndSort" parameterType="integer" resultMap="BaseResultMap">
-        select * from blog,user_collect WHERE user_collect.sort = 1 AND user_collect.collect_id = blog.id AND
-        user_collect.user_id = #{userId}
+    <select id="selectAllByStatusAndSortIdAndUserId" resultMap="BaseResultMap">
+        SELECT * FROM blog,user_blog,sort_blog
+        WHERE blog.id=sort_blog.blog_id
+        AND blog.id=user_blog.blog_id
+        AND sort_id=#{sortId}
+        AND user_id=#{userId}
+        AND blog.status=#{status}
+    </select>
+    <select id="selectAllByStatus" resultMap="BaseResultMap">
+        SELECT * FROM blog
+        WHERE status=#{status}
+    </select>
+    <select id="selectAllByStatusAndUserId" resultMap="BaseResultMap">
+        SELECT * FROM blog,user_blog
+        WHERE user_blog.blog_id=blog.id
+        AND user_blog.user_id=#{userId}
+        AND blog.status=#{status}
+    </select>
+    <select id="selectAllByStatusAndSortId" resultMap="BaseResultMap">
+        SELECT * FROM blog,sort_blog
+        WHERE blog.id=sort_blog.blog_id
+        AND blog.status=#{status}
+        AND sort_blog.sort_id=#{sortId}
+    </select>
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+        SELECT * FROM blog,user_blog
+        WHERE user_blog.blog_id=blog.id
+        AND user_blog.user_id=#{userId}
+    </select>
+    <select id="selectAllBySortIdAndUserId" resultMap="BaseResultMap">
+        select * from user_blog,sort_blog,blog
+        WHERE blog.id = user_blog.blog_id
+        AND blog.id = sort_blog.blog_id
+        AND user_blog.user_id = #{userId}
+        AND sort_blog.sort_id = #{sortId}
     </select>
 </mapper>

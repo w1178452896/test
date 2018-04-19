@@ -23,7 +23,9 @@ public class BlogVo {
     /**
      * 点赞总数
      */
-    private Integer countUser;
+    private Integer userCount;
+
+    private Integer commentCount;
 
     public Blog getBlog() {
         return blog;
@@ -31,14 +33,6 @@ public class BlogVo {
 
     public void setBlog(Blog blog) {
         this.blog = blog;
-    }
-
-    public Integer getCountUser() {
-        return countUser;
-    }
-
-    public void setCountUser(Integer countUser) {
-        this.countUser = countUser;
     }
 
     public User getUser() {
@@ -55,5 +49,21 @@ public class BlogVo {
 
     public void setSort(Sort sort) {
         this.sort = sort;
+    }
+
+    public Integer getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 }

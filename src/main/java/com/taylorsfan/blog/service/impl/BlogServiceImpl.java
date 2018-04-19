@@ -3,18 +3,11 @@ package com.taylorsfan.blog.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Blog;
-import com.taylorsfan.blog.model.relation.UserBlog;
 import com.taylorsfan.blog.repository.BlogMapper;
-import com.taylorsfan.blog.repository.SortMapper;
-import com.taylorsfan.blog.repository.UserMapper;
-import com.taylorsfan.blog.repository.BlogUserMapper;
-import com.taylorsfan.blog.repository.UserBlogMapper;
 import com.taylorsfan.blog.service.BlogService;
-import com.taylorsfan.blog.vo.BlogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,50 +16,76 @@ import java.util.Map;
  */
 @Service
 public class BlogServiceImpl implements BlogService {
-    @Autowired
-    private BlogMapper blogMapper;
-    @Autowired
-    private UserBlogMapper userBlogMapper;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private SortMapper sortMapper;
-    @Autowired
-    private BlogUserMapper blogUserMapper;
 
+    private final BlogMapper blogMapper;
+
+    @Autowired
+    public BlogServiceImpl(BlogMapper blogMapper) {
+        this.blogMapper = blogMapper;
+    }
+
+    /**
+     * 后台显示所有文章
+     * 首页显示的正常的文章
+     * 显示的审核中的文章
+     * 显示
+     * 用户正常的文章；
+     * 被封禁的文章；
+     * 正在审核中的文章。
+     */
     @Override
-    public List<BlogVo> showAll(Map<String, Integer> map) {
-        List<BlogVo> blogVoList = new ArrayList<>();
-        List<Blog> blogList = new ArrayList<>();
+    public List<Blog> showAll(Map<String, Integer> map) {
+        List<Blog> blogList;
+        //分页
         PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
-        if (map.containsKey("userId") && map.containsKey("status")) {
-            map.remove("pageNum");
-            map.remove("pageSize");
-            blogList = blogMapper.selectAllByUserIdAndStatus(map);
-        } else if (!map.containsKey("userId") && map.containsKey("status")) {
+        // 用户主页按分类查询
+        if (map.containsKey("userId") && map.containsKey("status") && map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllByStatusAndSortIdAndUserId(map.get("status"), map.get("userId"), map.get("sortId"));
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
+        }
+        //用户个人主页显示
+        else if (map.containsKey("userId") && map.containsKey("status") && !map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllByStatusAndUserId(map.get("status"), map.get("userId"));
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
+        }
+        //首页显示按分类
+        else if (!map.containsKey("userId") && map.containsKey("status") && map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllByStatusAndSortId(map.get("status"), map.get("sortId"));
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
+        }
+        //首页显示|后台按状态
+        else if (!map.containsKey("userId") && map.containsKey("status") && !map.containsKey("sortId")) {
             blogList = blogMapper.selectAllByStatus(map.get("status"));
-        } else if (!map.containsKey("userId") && !map.containsKey("status")) {
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
+        }
+        // 后台按用户
+        else if (map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllByUserId(map.get("userId"));
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
+        }
+        // 后台按分类
+        else if (!map.containsKey("userId") && !map.containsKey("status") && map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllBySortId(map.get("sortId"));
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
+        }
+        //后台所有
+        else if (!map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
             blogList = blogMapper.selectAll();
+            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+            return pageInfo.getList();
         }
-        PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-        for (Blog blog : pageInfo.getList()) {
-            BlogVo blogVo = new BlogVo();
-            blogVo.setBlog(blog);
-            blogVo.setUser(userMapper.selectOneByBlogId(blog.getId()));
-            blogVo.setSort(sortMapper.selectOneByBlogId(blog.getId()));
-            blogVo.setCountUser(blogUserMapper.count(blog.getId()));
-            blogVoList.add(blogVo);
-        }
-        return blogVoList;
+        return null;
     }
 
     @Override
-    public BlogVo show(int blogId) {
-        BlogVo blogVo = new BlogVo();
-        blogVo.setBlog(blogMapper.selectOneByPrimaryKey(blogId));
-        blogVo.setUser(userMapper.selectOneByBlogId(blogId));
-        blogVo.setCountUser(blogUserMapper.count(blogId));
-        return blogVo;
+    public Blog showOne(int blogId) {
+        return blogMapper.selectOneByPrimaryKey(blogId);
     }
 
     @Override
@@ -80,13 +99,12 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public boolean insert(BlogVo blogVo) {
-        if (blogMapper.insert(blogVo.getBlog()) != 0) {
-            UserBlog userBlog = new UserBlog();
-            userBlog.setBlog(blogVo.getBlog().getId());
-            userBlog.setUserId(blogVo.getUser().getId());
-            return userBlogMapper.insert(userBlog) != 0;
-        }
-        return false;
+    public boolean insert(Blog blog) {
+        return blogMapper.insert(blog) != 0;
+    }
+
+    @Override
+    public Blog showOneByCommentId(int commentId) {
+        return blogMapper.selectOneByCommentId(commentId);
     }
 }

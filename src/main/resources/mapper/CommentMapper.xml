@@ -8,44 +8,53 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
     </resultMap>
-    <sql id="Base_Column_List">
-        id, create_time, content, status, parent_id
-    </sql>
-    <select id="selectAll" resultMap="BaseResultMap">
-        select * from comment
+    <select id="selectAllByStatus" resultMap="BaseResultMap">
+        SELECT * FROM comment
+        WHERE status=#{status}
+        ORDER BY create_time DESC
     </select>
     <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
-        select * from comment WHERE id = #{id}
+        SELECT * FROM comment
+        WHERE id=#{id}
     </select>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Comment" useGeneratedKeys="true" keyProperty="id">
-        insert into comment (id, create_time, content,
-        status, parent_id)
-        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
-        #{status,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER})
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (create_time,content,status,parent_id)
+        VALUES (#{comment.createTime,jdbcType=VARCHAR},#{comment.content,jdbcType=VARCHAR},
+        #{comment.status,jdbcType=INTEGER},#{comment.parentId,jdbcType=INTEGER})
     </insert>
-    <select id="selectAllByUserId" parameterType="integer" resultMap="BaseResultMap">
-        select comment.* from comment,comment_user WHERE comment_user.user_id = #{userId}
-        AND comment_user.comment_id = comment.id
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+        SELECT comment.* FROM comment,comment_user
+        WHERE comment_user.user_id=#{userId}
+        AND comment_user.comment_id=comment.id
+        ORDER BY create_time DESC
     </select>
-    <select id="selectAllByBlogId" parameterType="integer" resultMap="BaseResultMap">
-        select comment.* FROM comment,blog_comment WHERE blog_comment.blog_id = #{blogId}
-        AND comment.parent_id = 0
+    <select id="selectAllByBlogId" resultMap="BaseResultMap">
+        SELECT comment.* FROM comment,blog_comment
+        WHERE blog_comment.blog_id=#{blogId}
+        ORDER BY create_time DESC
     </select>
-    <select id="selectAllByCommentId" parameterType="integer" resultMap="BaseResultMap">
-        select * from comment WHERE parent_id = #{commentId}
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM comment
     </select>
-    <delete id="deleteByBlogId" parameterType="integer">
-        DELETE FROM comment WHERE id IN (select comment_id from blog_comment WHERE blog_comment.blog_id = #{blogId})
+    <select id="update">
+        UPDATE blog SET content = '根据相关政策，该评论不予显示！'
+        WHERE id=#{id}
+    </select>
+    <delete id="deleteByBlogId">
+        DELETE FROM comment
+        WHERE id IN (SELECT comment_id FROM blog_comment
+        WHERE blog_comment.blog_id=#{blogId})
     </delete>
-    <update id="updateByCommentId" parameterType="integer">
+    <update id="updateByCommentId">
         UPDATE comment SET
         content = '此评论已被删除'
-        WHERE id = #{commentId}
+        WHERE id=#{commentId}
     </update>
-    <update id="updateByUserId" parameterType="integer">
+    <update id="updateByUserId">
         UPDATE comment SET
         content = '此用户已被删除！'
-        WHERE id IN (select comment_id from comment_user WHERE user_id = #{userId})
+        WHERE id IN (SELECT comment_id FROM comment_user
+        WHERE user_id=#{userId})
     </update>
 
 </mapper>

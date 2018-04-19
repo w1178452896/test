@@ -1,7 +1,5 @@
 package com.taylorsfan.blog.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Role;
 import com.taylorsfan.blog.repository.RoleMapper;
 import com.taylorsfan.blog.service.RoleService;
@@ -25,9 +23,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> showAll(Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        return new PageInfo<>(roleMapper.selectAll()).getList();
+    public List<Role> showAll(Map<String, Integer> map) {
+        if (map.containsKey("userId")) {
+            return roleMapper.selectAllByUserId(map.get("userId"));
+        } else if (!map.containsKey("userId")) {
+            return roleMapper.selectAll();
+        }
+        return null;
     }
 
     @Override
@@ -36,12 +38,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(int id) {
         return roleMapper.deleteByPrimaryKey(id) != 0;
+    }
+
+    @Override
+    public Role showOne(int id) {
+        return null;
     }
 
     @Override
     public boolean insert(Role role) {
         return roleMapper.insert(role) != 0;
     }
+
 }

@@ -5,40 +5,36 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="permission_name" jdbcType="VARCHAR" property="permissionName"/>
     </resultMap>
-    <sql id="Base_Column_List">
-        id, permission_name
-    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
-        select * from permission
+        SELECT * FROM permission
     </select>
-    <select id="selectOneByPrimaryKey" parameterType="integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from permission
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM permission
+        WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="integer">
-        delete from permission
-        where id = #{id,jdbcType=INTEGER}
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM permission
+        WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Permission" keyProperty="id" useGeneratedKeys="true">
-        insert into permission (id, permission_name)
-        values (#{id,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR})
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO permission (permission_name)
+        VALUES (#{permission.permissionName,jdbcType=VARCHAR})
     </insert>
-    <update id="updateByPrimaryKey" parameterType="permission">
-        update permission
-        set permission_name = #{permissionName,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
+    <update id="updateByPrimaryKey">
+        UPDATE permission
+        SET permission_name = #{permission.permissionName,jdbcType=VARCHAR}
+        WHERE id=#{permission.id,jdbcType=INTEGER}
     </update>
-    <select id="selectAllByRoleId" parameterType="integer" resultMap="BaseResultMap">
-        select permission.* from role_permission,permission WHERE role_permission.role_id = #{roleId}
-        AND permission.id = role_permission.permission_id
+    <select id="selectAllByRoleId" resultMap="BaseResultMap">
+        SELECT permission.* FROM role_permission,permission
+        WHERE role_permission.role_id=#{roleId}
+        AND permission.id=role_permission.permission_id
     </select>
-    <select id="selectAllByUserId" parameterType="integer" resultType="string">
-        select DISTINCT permission.permission_name permissionName
-        from user_role,role,role_permission,permission
-        WHERE user_id = 1 AND user_role.role_id = role.id
-        AND role.id= role_permission.role_id
-        AND permission.id = role_permission.permission_id
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+        SELECT DISTINCT permission.*
+        FROM user_role,role,role_permission,permission
+        WHERE user_id=#{userId} AND user_role.role_id=role.id
+        AND role.id=role_permission.role_id
+        AND permission.id=role_permission.permission_id
     </select>
 </mapper>

@@ -11,10 +11,9 @@ import java.util.List;
 
 public class UserVo {
     private User user;
-    private int focusCount;
-    private int fanCount;
-    private int blogCount;
-    private List<Role> roleList;
+    private Integer focusCount;
+    private Integer fanCount;
+    private Integer blogCount;
 
     public User getUser() {
         return user;
@@ -24,36 +23,28 @@ public class UserVo {
         this.user = user;
     }
 
-    public int getFocusCount() {
+    public Integer getFocusCount() {
         return focusCount;
     }
 
-    public void setFocusCount(int focusCount) {
+    public void setFocusCount(Integer focusCount) {
         this.focusCount = focusCount;
     }
 
-    public int getFanCount() {
+    public Integer getFanCount() {
         return fanCount;
     }
 
-    public void setFanCount(int fanCount) {
+    public void setFanCount(Integer fanCount) {
         this.fanCount = fanCount;
     }
 
-    public int getBlogCount() {
+    public Integer getBlogCount() {
         return blogCount;
     }
 
-    public void setBlogCount(int blogCount) {
+    public void setBlogCount(Integer blogCount) {
         this.blogCount = blogCount;
-    }
-
-    public List<Role> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(List<Role> roleList) {
-        this.roleList = roleList;
     }
 
 }

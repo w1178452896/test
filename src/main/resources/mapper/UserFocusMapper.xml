@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.taylorsfan.blog.repository.UserFocusMapper">
-    <resultMap id="BaseResultMap" type="com.taylorsfan.blog.model.relation.UserFocus">
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
-        <result column="focus_id" jdbcType="INTEGER" property="focusId"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, user_id, focus_id
-    </sql>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.relation.UserFocus">
-        insert into user_focus (id, user_id, focus_id)
-        values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{focusId,jdbcType=INTEGER})
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_focus (user_id,focus_id)
+        VALUES (#{userFocus.userId,jdbcType=INTEGER},#{userFocus.focusId,jdbcType=INTEGER})
     </insert>
-    <select id="count" parameterType="integer" resultType="int">
-        select * from user_focus WHERE user_id = #{userId}
+    <select id="countFocus" resultType="integer">
+        SELECT count(*) FROM user_focus
+        WHERE user_id=#{userId}
     </select>
-    <delete id="deleteByUserId" parameterType="integer">
-        delete from user_focus WHERE user_id = #{userId}
+    <delete id="deleteByUserId">
+        DELETE FROM user_focus
+        WHERE user_id=#{userId}
     </delete>
     <delete id="deleteByFocusId">
-        DELETE FROM user_focus WHERE focus_id = #{focusId}
+        DELETE FROM user_focus
+        WHERE focus_id=#{focusId}
     </delete>
 
 </mapper>

@@ -8,7 +8,7 @@ public class UserBlog {
 
     private Integer userId;
 
-    private Integer blog;
+    private Integer blogId;
 
     public Integer getId() {
         return id;
@@ -26,11 +26,11 @@ public class UserBlog {
         this.userId = userId;
     }
 
-    public Integer getBlog() {
-        return blog;
+    public Integer getBlogId() {
+        return blogId;
     }
 
-    public void setBlog(Integer blog) {
-        this.blog = blog;
+    public void setBlogId(Integer blogId) {
+        this.blogId = blogId;
     }
 }

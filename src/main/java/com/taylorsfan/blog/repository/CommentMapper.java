@@ -1,6 +1,8 @@
 package com.taylorsfan.blog.repository;
 
+import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.model.Comment;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -9,36 +11,40 @@ import java.util.List;
  */
 public interface CommentMapper {
 
-    List<Comment> selectAll();
-
-    Comment selectOneByPrimaryKey(Integer id);
-
-    Integer insert(Comment comment);
-
-    /**
-     * 根据用户id查询
-     */
-    List<Comment> selectAllByUserId(Integer userId);
-
-    /**
-     * 根据文章id查询
-     */
-    List<Comment> selectAllByBlogId(Integer blogId);
-
-    List<Comment> selectAllByCommentId(Integer commentId);
+    int insert(@Param("comment") Comment comment);
 
     /**
      * 根据文章id删除
      */
-    Integer deleteByBlogId(Integer blogId);
+    int deleteByBlogId(@Param("blogId") int blogId);
+
+    int update(@Param("id") int id);
 
     /**
-     * 根据用户id更新
+     * 用户注销，根据用户id删除
      */
-    Integer updateByUserId(Integer userId);
+    int updateByUserId(@Param("userId") int userId);
 
     /**
-     * 根据评论id更新
+     * 用户删除自己的评论
      */
-    Integer updateByCommentId(Integer commentId);
+    int updateByCommentId(@Param("commentId") int commentId);
+
+    List<Comment> selectAll();
+
+    List<Comment> selectAllByStatus(@Param("status") int status);
+
+    /**
+     * 根据用户id查询
+     */
+    List<Comment> selectAllByUserId(@Param("userId") int userId);
+
+    /**
+     * 根据文章id查询 时间倒叙排列
+     */
+    List<Comment> selectAllByBlogId(@Param("blogId") int blogId);
+
+    Comment selectOneByPrimaryKey(@Param("id") int id);
+
+
 }

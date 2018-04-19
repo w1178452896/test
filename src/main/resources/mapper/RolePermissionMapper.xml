@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.taylorsfan.blog.repository.RolePermissionMapper">
-    <resultMap id="BaseResultMap" type="com.taylorsfan.blog.model.relation.RolePermission">
-        <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
-        <result column="permission_id" jdbcType="INTEGER" property="permissionId"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        id, role_id, permission_id
-    </sql>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.relation.RolePermission" keyProperty="id"
-            useGeneratedKeys="true">
-        insert into role_permission (role_id, permission_id
-        )
-        values ( #{roleId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER}
-        )
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO role_permission (role_id,permission_id)
+        VALUES (#{rolePermission.roleId,jdbcType=INTEGER},#{rolePermission.permissionId,jdbcType=INTEGER})
     </insert>
-    <delete id="deleteByRoleId" parameterType="integer">
+    <select id="countPermission" resultType="integer">
+        SELECT count(*) permissionCount FROM role_permission
+        WHERE role_id=#{roleId}
+    </select>
+    <delete id="deleteByRoleId">
         DELETE FROM role_permission
-        WHERE role_id = #{roleId}
+        WHERE role_id=#{roleId}
     </delete>
-    <delete id="deleteByPermissionId" parameterType="integer">
+    <delete id="deleteByPermissionId">
         DELETE FROM role_permission
-        WHERE permission_id = #{permissionId}
+        WHERE permission_id=#{permissionId}
     </delete>
 </mapper>

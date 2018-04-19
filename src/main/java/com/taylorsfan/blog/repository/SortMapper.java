@@ -1,6 +1,7 @@
 package com.taylorsfan.blog.repository;
 
 import com.taylorsfan.blog.model.Sort;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,13 +12,13 @@ public interface SortMapper {
 
     List<Sort> selectAll();
 
-    Sort selectOneByPrimaryKey(Integer id);
+    Sort selectOneByPrimaryKey(@Param("id") int id);
 
-    Integer deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(@Param("id") int id);
 
-    Integer insert(Sort sort);
+    int insert(@Param("sort") Sort sort);
 
-    Integer updateByPrimaryKey(Sort sort);
+    int updateByPrimaryKey(@Param("sort") Sort sort);
 
-    Sort selectOneByBlogId(int blogId);
+    Sort selectOneByBlogId(@Param("blogId") int blogId);
 }

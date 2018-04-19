@@ -1,17 +1,21 @@
 package com.taylorsfan.blog.repository;
 
 import com.taylorsfan.blog.model.relation.BlogUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
  * @author taylorsfan
  */
-public interface BlogUserMapper extends BaseMapper<BlogUser> {
+public interface BlogUserMapper {
 
-    Integer deleteByUserId(Integer userId);
+    int insert(@Param("blogUser") BlogUser blogUser);
 
-    Integer deleteByBlogId(Integer blogId);
+    int countUser(@Param("blogId") int blogId);
 
-    List<BlogUser> selectAllByBlogId(int blogId);
+    int deleteByUserId(@Param("userId") int userId);
+
+    int deleteByBlogId(@Param("blogId") int blogId);
+
 }

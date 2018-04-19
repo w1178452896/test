@@ -5,37 +5,28 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
     </resultMap>
-    <sql id="Base_Column_List">
-        id, role_name
-    </sql>
     <select id="selectAll" resultMap="BaseResultMap">
-        select * from role
+        SELECT * FROM role
     </select>
-    <select id="selectOneByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from role
-        where id = #{id,jdbcType=INTEGER}
+    <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM role
+        WHERE id=#{id,jdbcType=INTEGER}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from role
-        where id = #{id,jdbcType=INTEGER}
+    <delete id="deleteByPrimaryKey">
+        DELETE FROM role
+        WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.taylorsfan.blog.model.Role" useGeneratedKeys="true" keyProperty="id">
-        insert into role (id, role_name)
-        values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR})
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role (role_name)
+        VALUES (#{role.roleName,jdbcType=VARCHAR})
     </insert>
-    <update id="updateByPrimaryKey" parameterType="com.taylorsfan.blog.model.Role">
-        update role
-        set role_name = #{roleName,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
+    <update id="updateByPrimaryKey">
+        UPDATE role
+        SET role_name = #{role.roleName,jdbcType=VARCHAR}
+        WHERE id=#{role.id,jdbcType=INTEGER}
     </update>
-    <select id="selectAllByUserId" parameterType="integer" resultMap="BaseResultMap">
-        select role.* from role,user_role
-        WHERE user_id = #{userId} AND user_role.role_id = role.id
-    </select>
-    <select id="selectAllRoleNameByUserId" parameterType="integer" resultType="string">
-        select role.role_name roleName from role,user_role
-        WHERE user_role.user_id =#{userId} AND user_role.role_id = role.id
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+        SELECT role.* FROM role,user_role
+        WHERE user_id=#{userId} AND user_role.role_id=role.id
     </select>
 </mapper>

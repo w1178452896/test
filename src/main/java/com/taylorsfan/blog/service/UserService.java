@@ -10,21 +10,17 @@ import java.util.Set;
 /**
  * @author momo
  */
-public interface UserService {
-    /**
-     * 后台显示所有用户
-     */
-    List<UserVo> showAll(Map<String, Integer> map);
+public interface UserService extends BaseService<User> {
 
     /**
-     * 删除
+     * 根据文章id查询user
      */
-    boolean delete(int userId);
+    User showUserByBlogId(int blogId);
 
     /**
-     * 更新
+     * 根据评论id查询user
      */
-    boolean update(User user);
+    User showUserByCommentId(int commentId);
 
     /**
      * 根据username判断是否在user表中
@@ -40,36 +36,5 @@ public interface UserService {
      * 重置密码
      */
     boolean resetPassword(int userId);
-
-    /**
-     * 根据username 查询角色名
-     */
-    Set<String> findRoleNameList(int userId);
-
-    /**
-     * 根据username查询权限名
-     */
-    Set<String> findPermissionNameList(int userId);
-
-    boolean changeRole(int userId, int[] roleIds);
-
-    /**
-     * 根据文章id查询user
-     */
-    UserVo showUserByBlogId(int blogId);
-
-    /**
-     * 根据评论id查询user
-     */
-    UserVo showUserByCommentId(int commentId);
-
-    /**
-     * 根据用户id查询用户
-     */
-    UserVo showUserVoByUserId(int userId);
-
-    User showUserByUserId(int userId);
-
-    boolean insert(User user);
 
 }

@@ -1,19 +1,14 @@
 package com.taylorsfan.blog.service;
 
 import com.taylorsfan.blog.model.Permission;
+import com.taylorsfan.blog.model.Role;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author taylorsfan
  */
-public interface PermissionService {
+public interface PermissionService extends BaseService<Permission> {
 
-    List<Permission> showAll(Integer pageNum, Integer pageSize);
-
-    boolean update(Permission permission);
-
-    boolean delete(Integer id);
-
-    boolean insert(Permission permission);
 }

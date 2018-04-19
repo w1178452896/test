@@ -1,7 +1,6 @@
 package com.taylorsfan.blog.service;
 
-import com.taylorsfan.blog.model.Blog;
-import com.taylorsfan.blog.vo.CommentVo;
+import com.taylorsfan.blog.model.Comment;
 
 import java.util.List;
 import java.util.Map;
@@ -9,19 +8,7 @@ import java.util.Map;
 /**
  * @author taylorsfan
  */
-public interface CommentService {
-
-    List<CommentVo> showAll(Map<String, Integer> map);
-
-    /**
-     * 新建评论
-     */
-    boolean insert(CommentVo commentVo);
-
-    /**
-     * 根据commentId删除评论
-     */
-    boolean deleteByCommentId(int commentId);
+public interface CommentService extends BaseService<Comment> {
 
     /**
      * 根据userId删除comment
@@ -33,4 +20,10 @@ public interface CommentService {
      */
     boolean deleteByBlogId(int blogId);
 
+    /**
+     * 管理员删除comment
+     */
+    boolean updateByChecker(int commentId);
+
+    boolean deleteByCommentId(int commentId);
 }

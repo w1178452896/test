@@ -10,7 +10,13 @@ import com.taylorsfan.blog.model.User;
  * @author momo
  */
 public class CommentVo {
-    private Blog blog;
+    /**
+     *
+     */
+    private int blogId;
+    /**
+     * 评论
+     */
     private Comment comment;
     /**
      * 对应用户
@@ -45,11 +51,12 @@ public class CommentVo {
         this.beCommentedUser = beCommentedUser;
     }
 
-    public Blog getBlog() {
-        return blog;
+    public int getBlogId() {
+        return blogId;
     }
 
-    public void setBlog(Blog blog) {
-        this.blog = blog;
+    public void setBlogId(int blogId) {
+        this.blogId = blogId;
     }
+
 }

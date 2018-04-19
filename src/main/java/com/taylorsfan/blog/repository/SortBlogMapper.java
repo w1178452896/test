@@ -1,14 +1,19 @@
 package com.taylorsfan.blog.repository;
 
 import com.taylorsfan.blog.model.relation.SortBlog;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author taylorsfan
  */
-public interface SortBlogMapper extends BaseMapper<SortBlog> {
+public interface SortBlogMapper {
 
-    Integer deleteByBlogId(int blogId);
+    int countBlog(@Param("sortId") int sortId);
 
-    Integer deleteBySortId(int sortId);
+    int insert(@Param("sortBlog") SortBlog sortBlog);
+
+    int deleteByBlogId(@Param("blogId") int blogId);
+
+    int deleteBySortId(@Param("sortId") int sortId);
 
 }
