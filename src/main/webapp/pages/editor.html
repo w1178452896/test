@@ -20,10 +20,10 @@
 <body class="baitian">
 <div class="container-fluid">
     <div class="row home">
-        <h1><b><a href="/">Blog</a></b></h1>
-        <h3>
+        <h1><b><a href="#">Blog</a></b></h1>
+        <!--<h3>
             <small><i>让你专注写作</i></small>
-        </h3>
+        </h3>-->
         <!--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
                 aria-expanded="false" aria-controls="collapseExample">
             Button with data-target
@@ -36,16 +36,16 @@
     </div>
     <div class="setting">
         <span class="glyphicon glyphicon-edit" style="color: #f9f9f9; font-size: 30px; padding: 13px;"></span>
-        <div class="writeHelp">
+        <div class="writeHelp" id="writeHelp">
             <h4 class="text-center"><span class="glyphicon glyphicon-cog"></span> 设置</h4>
             <div class="form-group" style="margin-bottom: 30px">
                 <label>主题</label>
                 <div class="btn-group" data-toggle="buttons">
                     <label class="btn btn-default active" onclick="chooseTheme('sun');">
-                        <input type="radio" name="options" id="sun" autocomplete="off" checked>白天
+                        <input type="radio" name="options" id="sun" autocomplete="off" checked><span class="fa fa-sun-o"></span>
                     </label>
                     <label class="btn btn-default" onclick="chooseTheme('moon')">
-                        <input type="radio" name="options" id="moon" autocomplete="off">黑夜
+                        <input type="radio" name="options" id="moon" autocomplete="off"><span class="fa fa-moon-o"></span>
                     </label>
                 </div>
             </div>
@@ -63,12 +63,28 @@
                     <option value="随笔">随笔</option>
                 </select>
             </div>
-            <div style="padding-bottom: 20px; margin-top: 150px" class="text-center">
+            <div>
+                <button type="button" class="btn btn-info" id="caogao" onclick="openCaogao();"><span class="glyphicon glyphicon-duplicate"></span> 草稿管理</button>
+            </div>
+            <div style="padding-bottom: 20px; margin-top: 90px" class="text-center">
                 <a href="javascript:$.proxy(editor.toolbarHandlers.help, editor)();"><span>Markdown使用帮助</span></a>
             </div>
             <div class="btn-group pull-right" role="group">
                 <button type="button" class="btn btn-default" id="save" onclick="savelocal();"><span class="glyphicon glyphicon-floppy-saved"></span> 保存</button>
                 <button type="button" class="btn btn-default" id="share"><span class="glyphicon glyphicon-share-alt"></span> 发布</button>
+            </div>
+        </div>
+        <div class="writeCaogao" id="writeCaogao">
+            <h4 class="text-center"><span class="glyphicon glyphicon-duplicate"></span> 草稿管理</h4>
+            <div class="table-responsive" style="height: 380px">
+                <table class="table table-hover">
+                    <tr><th></th><th>标题</th><th>分类</th><th>时间</th><th></th></tr>
+                    <tbody></tbody>
+                </table>
+                <span class="fa fa-spinner fa-pulse fa-2x" id="loading" style="padding: 0px 130px"></span>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-danger" id="Cexit" onclick="Cexit()"><span class="glyphicon glyphicon-arrow-right"></span> 返回</button>
             </div>
         </div>
     </div>
@@ -85,9 +101,8 @@
 <script>
     var editor;
     $(function () {
-        getlocal();
         // 配置编译器
-            editor = editormd({
+        editor = editormd({
             id: "editormd",
             path: "/resources/editor/lib/",
             imageUpload: true,
@@ -113,9 +128,8 @@
                 return ["undo", "redo", "|", "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|", "goto-line", "clear", "search", "||", "watch", "preview", "fullscreen"]
             },
         });
-        
     });
-    
+
     //改变主题
     function chooseTheme(o) {
         if (o == 'moon') {
@@ -131,34 +145,93 @@
             $('body').attr('class', 'baitian');
         }
     }
-    
+
     //保存到本地
     function savelocal() {
+        var number;
+        if (localStorage.getItem('number') == null) {
+            number = 1;
+        } else {
+            number = parseInt(localStorage.getItem('number')) + 1;
+        }
         var source = editor.getMarkdown();
         var title = $('#title').val();
         var sort = $('#sort').val();
-        var articleDate = {title:title,sort:sort,source:source};
-        window.localStorage.setItem('articleDate', JSON.stringify(articleDate));
-        if (localStorage.getItem('articleDate') == null) {
+        var date = new Date();
+        date = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+        var articleDate = {title:title,sort:sort,date:date,source:source};
+        var key = 'articleDate' + '_' + number;
+        window.localStorage.setItem(key, JSON.stringify(articleDate));
+        if (localStorage.getItem(key) == null) {
             alert('保存失败请重试');
         } else {
+            localStorage.setItem('number', number);
             alert("保存成功！");
         }
     }
-    
+
     //从本地读取
     function getlocal() {
-        if (localStorage.getItem('articleDate') != null) {
-            var temp, source, title, sort;
-            temp = localStorage.getItem('articleDate');
-            var articleDate = JSON.parse(temp);
-            source = articleDate.source;
-            title = articleDate.title;
-            sort = articleDate.sort;
-            $('#title').val(title);
-            $('#sort').val(sort);
-            $('textarea').val(source);
+        if (localStorage.getItem('number') != null && localStorage.getItem('number') != localStorage.getItem('remove')) {
+            var key = 'articleDate';
+            var number = parseInt(localStorage.getItem('number'));
+            var temp, articleDate;
+            for (var i = 1; i <= number; i++) {
+                temp = localStorage.getItem(key + '_' + i);
+                if (temp != null) {
+                    articleDate = JSON.parse(temp);
+                    $('#writeCaogao table tbody:eq(1)').append('<tr><td>' + i + '</td><td>' + articleDate.title + '</td><td>' + articleDate.sort + '</td><td>' + articleDate.date + '</td><td><a href="javascript:(0)" onclick="delCg(this)"><span class="fa fa-trash"> </span></a>&nbsp;&nbsp;&nbsp;<a href="javascript:(0)" onclick="editorCg(this)"><span class="fa fa-file-text-o"> </span></a></td></tr>')
+                }
+            }
+            $('#loading').remove();
         }
     }
+
+    //打开草稿管理
+    function openCaogao() {
+        $('#writeHelp').css("display", "none");
+//        $('#writeCaogao').css("display", "block");
+        $('#writeCaogao').slideDown(300);
+        $('#writeCaogao table tbody:eq(1)').html(' ');
+        getlocal();
+    }
+    //退出草稿管理
+    function Cexit() {
+        $('#writeCaogao').css('display', 'none');
+        $('#writeHelp').css('display', 'block');
+    }
+
+    function delCg(obj) {
+        var remove;
+        if (localStorage.getItem('remove') == null) {
+            remove = 0;
+        } else  {
+            remove = parseInt(localStorage.getItem('remove'));
+        }
+        var id = $(obj).parent().parent().children().eq(0).text();
+        var key = 'articleDate' + '_' + id;
+        localStorage.removeItem(key);
+        $(obj).parent().parent().remove();
+        if (localStorage.getItem(key) == null) {
+            remove++;
+            if (localStorage.getItem('number') == remove) {
+                localStorage.removeItem('number');
+                localStorage.removeItem('remove');
+            }
+            else
+                localStorage.setItem('remove', remove);
+        }
+    }
+    function editorCg(o) {
+        var id = $(o).parent().parent().children().eq(0).text();
+        var temp = JSON.parse(localStorage.getItem('articleDate' + '_' + id));
+        var title = temp.title;
+        var sort = temp.sort;
+        var source = temp.source;
+        $('#title').val(title);
+        $('#sort').val(sort);
+        editor.setMarkdown(source);
+    }
+
 </script>
 </html>
