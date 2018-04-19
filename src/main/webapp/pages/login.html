@@ -57,7 +57,7 @@
                     </label>
                 </div>
                 <br>
-                <input type="button" value="登录" name="login" class="btn btn-lg btn-primary btn-block" />
+                <input type="button" value="登录" name="login" class="btn btn-lg btn-primary btn-block"/>
             </form>
         </div>
     </div>
@@ -70,13 +70,13 @@
 <script>
     $("input[name=login]").click(function () {
         $.ajax({
-            url : "/user/login",
-            type : "post",
-            data : {
-                username : $("input[name=uername]").val(),
-                password : $("input[name=psassword]").val(),
+            url: "/user/login",
+            type: "post",
+            data: {
+                "username": $("input[name=uername]").val(),
+                "password": $("input[name=psassword]").val()
             },
-            success : function (data) {
+            success: function (data) {
                 if (data == "success") {
                     location.href = "/";
                 }

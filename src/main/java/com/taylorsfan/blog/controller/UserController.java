@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,11 +79,13 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/login")
-    public User login(String username, String password) {
-        if (userService.login(username, password) != null) {
-            return userService.login(username, password);
+    public ResultUtil login(String username, String password, HttpSession httpSession) {
+        User user = userService.login(username, password);
+        if (user != null) {
+            httpSession.setAttribute("user", user);
+            return new ResultUtil(200, "success");
         }
-        return null;
+        return new ResultUtil(500, "failure");
     }
 
     /**
@@ -152,7 +155,7 @@ public class UserController {
         return "user/index";
     }
 
-    @RequestMapping("{userId}")
+    @RequestMapping("/personal/{userId}")
     public String showUser(Model model, @PathVariable int userId) {
         model.addAttribute("user", userService.showOne(userId));
         return "user/user";
