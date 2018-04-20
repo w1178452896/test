@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.UUID;
 
 
 /**
@@ -47,4 +49,28 @@ public class IndexController {
         int w = 110, h = 40;
         VerifyCodeUtils.outputImage(w, h, response.getOutputStream(), verifyCode);
     }
+
+    @RequestMapping("/uploadPic")
+    public void uploadPic(HttpServletResponse response, @RequestParam(value = "editormd-image-file", required = false) MultipartFile multipartFile) {
+        try {
+            String pictureName = multipartFile.getOriginalFilename();
+            String newFileName = UUID.randomUUID().toString() + pictureName.substring(pictureName.lastIndexOf("."));
+            String uploadDir = "F:/Pictures/";
+            File file = new File(uploadDir + newFileName);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            multipartFile.transferTo(file);
+            String success = "{\"success\": 1, \"message\":\"上传成功\",\"url\":\"/upload/" + newFileName + "\"}";
+            response.getWriter().write(success);
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                response.getWriter().write("{\"success\":0, \"message\":\"上传失败\"}");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
 }
