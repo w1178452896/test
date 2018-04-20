@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +46,15 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/register")
-    public ResultUtil register(User user) {
-        if (userService.insert(user)) {
-            UserRole userRole = new UserRole();
-            userRole.setRoleId(1);
-            userRole.setUserId(user.getId());
-            if (userRoleService.insert(userRole)) {
-                return new ResultUtil(200, "success");
+    public ResultUtil register(User user, String code, HttpSession session) {
+        if (code.equals(session.getAttribute("veryCode"))) {
+            if (userService.insert(user)) {
+                UserRole userRole = new UserRole();
+                userRole.setRoleId(1);
+                userRole.setUserId(user.getId());
+                if (userRoleService.insert(userRole)) {
+                    return new ResultUtil(200, "success");
+                }
             }
         }
         return new ResultUtil(500, "failure");
@@ -79,11 +82,13 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/login")
-    public ResultUtil login(String username, String password, HttpSession httpSession) {
-        User user = userService.login(username, password);
-        if (user != null) {
-            httpSession.setAttribute("user", user);
-            return new ResultUtil(200, "success");
+    public ResultUtil login(String username, String password, String code,  HttpSession httpSession) {
+        if (code.equals(httpSession.getAttribute("veryCode"))) {
+            User user = userService.login(username, password);
+            if (user != null) {
+                httpSession.setAttribute("user", user);
+                return new ResultUtil(200, "success");
+            }
         }
         return new ResultUtil(500, "failure");
     }

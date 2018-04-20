@@ -52,7 +52,7 @@
             <input type="text" name="code" class="form-control input-lg" placeholder="验证码">
           </div>
           <div class="col-xs-5" style="padding-left: 10px">
-            <img src="1.png" class="img-rounded" alt="加载验证码失败" width="99px" height="44px"/>
+            <img src="/veryCode" class="img-rounded" alt="加载验证码失败" width="99px" height="44px"/>
           </div>
         </div>
         <div class="radio">
@@ -78,14 +78,15 @@
   $("input[name=submit]").click(function () {
       $.ajax({
           url : "/user/register",
-          type : "post",
+          type : "get",
           data : {
               username : $("input[name=username]").val(),
               password : $("input[name=password]").val(),
-              sex : $("input[name=sex]").val()
+              sex : $("input[name=sex]").val(),
+              code : $("input[name=code]").val()
           },
           success : function (data) {
-              if (data == "success") {
+              if (data.code === 200) {
                   alert("注册成功请登录！");
                   location.href = "/pages/login.html";
               }
