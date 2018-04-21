@@ -1,12 +1,14 @@
 package com.taylorsfan.blog.controller;
 
 import com.taylorsfan.blog.model.Comment;
+import com.taylorsfan.blog.model.Sort;
 import com.taylorsfan.blog.model.User;
 import com.taylorsfan.blog.model.relation.BlogUser;
 import com.taylorsfan.blog.model.relation.SortBlog;
 import com.taylorsfan.blog.model.relation.UserBlog;
 import com.taylorsfan.blog.service.BlogService;
 import com.taylorsfan.blog.service.CommentService;
+import com.taylorsfan.blog.service.SortService;
 import com.taylorsfan.blog.service.relation.*;
 import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.util.StringsUtil;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +31,7 @@ import java.util.Map;
 @RestController
 public class BlogController {
     private final BlogService blogService;
+    private final SortService sortService;
     private final BlogUserService blogUserService;
     private final UserBlogService userBlogService;
     private final BlogCommentService blogCommentService;
@@ -40,7 +44,7 @@ public class BlogController {
     public BlogController(BlogService blogService, BlogUserService blogUserService,
                           BlogCommentService blogCommentService, CommentService commentService,
                           SortBlogService sortBlogService, UserBlogService userBlogService,
-                          CommentUserService commentUserService, UserCommentService userCommentService) {
+                          CommentUserService commentUserService, UserCommentService userCommentService, SortService sortService) {
         this.blogService = blogService;
         this.blogUserService = blogUserService;
         this.blogCommentService = blogCommentService;
@@ -49,6 +53,7 @@ public class BlogController {
         this.userBlogService = userBlogService;
         this.commentUserService = commentUserService;
         this.userCommentService = userCommentService;
+        this.sortService = sortService;
     }
 
     /**
@@ -72,7 +77,10 @@ public class BlogController {
         }
         return new ResultUtil(500, "failure");
     }
-
+    @RequestMapping("/sort/all")
+    public List<Sort> SortAll() {
+        return sortService.showAll(new HashMap<>());
+    }
     /**
      * 删除
      */
