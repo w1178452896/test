@@ -13,5 +13,5 @@ public interface BlogVoService {
 
     BlogVo blogVo(int blogId);
 
-    List<BlogVo> blogVoList(int pageNum, int pageSize, int status, int userId, int sortId);
+    List<BlogVo> blogVoList(int pageNum, int pageSize, int status, int userId, int sortId,String page);
 }

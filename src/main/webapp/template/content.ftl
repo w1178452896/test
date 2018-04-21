@@ -1,12 +1,13 @@
+<#list blogVoList as blogVo>
 <div class="content">
     <div class="text-right">
-        <span>${authorName!"authorName"}</span>
+        <span>${blogVo.user.username}</span>
     </div>
     <div class="media">
         <div class="media-body">
-            <div class="media-heading">${title!"title"}</div>
+            <div class="media-heading">${blogVo.blog.title}</div>
             <div class="content-p">
-                <p>${content!"文章信息无法显示"}...</p>
+                <p>${blogVo.blog.content}</p>
             </div>
         </div>
         <div class="media-right media-middle">
@@ -17,10 +18,14 @@
                 </div>
             </a>
             <br>
-            <button class="btn btn-default btn-sm center-block"><span class="glyphicon glyphicon-heart" style="color: red"></span> 关注</button>
+            <button class="btn btn-default btn-sm center-block">
+                <span class="glyphicon glyphicon-heart" style="color: red"></span> 关注
+            </button>
         </div>
     </div>
     <div.content-info>
-        收藏&nbsp;<span class="label label-primary">${collection!0}</span> &nbsp;|&nbsp;<span class="label label-info">${createTime!"2018-01-01"}</span>
+        收藏&nbsp;<span class="label label-primary">${blogVo.userCount}</span> &nbsp;|&nbsp;<span
+            class="label label-info">${blogVo.blog.createTime}</span>
     </div.content-info>
 </div>
+</#list>

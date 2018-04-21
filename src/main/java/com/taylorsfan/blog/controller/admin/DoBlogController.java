@@ -9,9 +9,8 @@ import com.taylorsfan.blog.service.relation.BlogUserService;
 import com.taylorsfan.blog.util.MapUtil;
 import com.taylorsfan.blog.vo.BlogVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.Map;
 /**
  * @author tianle
  */
-@Controller
+@RestController
 @RequestMapping("/admin/blog")
 public class DoBlogController {
 
@@ -45,35 +44,31 @@ public class DoBlogController {
      * 文章显示
      */
     @RequestMapping("/all")
-    public String blogVoList(Model model, int pageNum, int pageSize, int status, int userId, int sortId) {
+    public List<BlogVo> blogVoList(int pageNum, int pageSize, int status, int userId, int sortId) {
         Map<String, Integer> map = MapUtil.int2map(pageNum, pageSize);
         // 后台按分类
         if (status == 0 && userId == 0 && sortId != 0) {
             map.put("sortId", sortId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
+            return map2blogVoList(map);
         }
         //后台按用户
         if (status == 0 && userId != 0 && sortId == 0) {
             map.put("userId", userId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
+            return map2blogVoList(map);
         }
         //后台按状态
         if (status != 0 && userId == 0 && sortId == 0) {
             map.put("status", status);
-            map2blogVoList(map, model);
-            return "list/blogVos";
+            return map2blogVoList(map);
         }
         //后台所有
         if (status == 0 && userId == 0 && sortId == 0) {
-            map2blogVoList(map, model);
-            return "list/blogVos";
+            return map2blogVoList(map);
         }
         return null;
     }
 
-    private void map2blogVoList(Map<String, Integer> map, Model model) {
+    private List<BlogVo> map2blogVoList(Map<String, Integer> map) {
         List<BlogVo> blogVoList = new ArrayList<>();
         List<Blog> blogList = blogService.showAll(map);
         for (Blog blog : blogList) {
@@ -86,6 +81,6 @@ public class DoBlogController {
             blogVo.setUserCount(blogUserService.count(blogId));
             blogVoList.add(blogVo);
         }
-        model.addAttribute("blogVoList", blogVoList);
+        return blogVoList;
     }
 }

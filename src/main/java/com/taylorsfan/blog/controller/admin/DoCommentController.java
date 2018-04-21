@@ -9,9 +9,8 @@ import com.taylorsfan.blog.service.relation.UserCommentService;
 import com.taylorsfan.blog.util.MapUtil;
 import com.taylorsfan.blog.vo.CommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.Map;
 /**
  * @author tianle
  */
-@Controller
+@RestController
 @RequestMapping("admin/comment")
 public class DoCommentController {
     private final CommentService commentService;
@@ -38,7 +37,7 @@ public class DoCommentController {
 
     //   后台
     @RequestMapping("/all")
-    public String commentVoList(Model model, int pageNum, int pageSize) {
+    public List<CommentVo> commentVoList(int pageNum, int pageSize) {
         Map<String, Integer> map = MapUtil.int2map(pageNum, pageSize);
         List<Comment> commentList = commentService.showAll(map);
         List<CommentVo> commentVoList = new ArrayList<>();
@@ -55,7 +54,6 @@ public class DoCommentController {
             }
             commentVoList.add(commentVo);
         }
-        model.addAttribute("commentVoList", commentVoList);
-        return "list/commentVos";
+        return commentVoList;
     }
 }

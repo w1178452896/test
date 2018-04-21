@@ -8,11 +8,10 @@ import com.taylorsfan.blog.service.relation.RolePermissionService;
 import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.vo.RoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +21,8 @@ import java.util.Map;
 /**
  * @author tianle
  */
+@RestController
 @RequestMapping("/admin/role")
-@Controller
 public class DoRoleController {
     private final RolePermissionService rolePermissionService;
     private final RoleService roleService;
@@ -39,7 +38,6 @@ public class DoRoleController {
     /**
      * 增加角色，分配权限
      */
-    @ResponseBody
     @RequestMapping("/insert")
     public ResultUtil insert(Role role, int permissionId) {
         if (roleService.insert(role)) {
@@ -56,7 +54,6 @@ public class DoRoleController {
     /**
      * 更改角色名
      */
-    @ResponseBody
     @RequestMapping("/{roleId}/update")
     public ResultUtil update(Role role, @PathVariable int roleId) {
         if (roleService.update(role)) {
@@ -66,38 +63,21 @@ public class DoRoleController {
     }
 
     /**
-     * 所有
+     * 展示一个
      */
-    @RequestMapping("/all")
-    public String roleVoList(Model model) {
-        List<Role> roleList = roleService.showAll(null);
-        List<RoleVo> roleVoList = new ArrayList<>();
-        for (Role role : roleList) {
-            RoleVo roleVo = new RoleVo();
-            roleVo.setRole(role);
-            Map<String, Integer> map = new HashMap<>();
-            map.put("roleId", role.getId());
-            roleVo.setPermissionList(permissionService.showAll(map));
-            roleVoList.add(roleVo);
-        }
-        model.addAttribute("roleVoList", roleVoList);
-        return "list/admin/roleVos";
-    }
-
     @RequestMapping("/{roleId}")
-    public String roleVo(Model model, @PathVariable int roleId) {
+    public RoleVo roleVo(@PathVariable int roleId) {
         Role role = roleService.showOne(roleId);
         RoleVo roleVo = new RoleVo();
         roleVo.setRole(role);
         Map<String, Integer> map = new HashMap<>();
         map.put("roleId", role.getId());
         roleVo.setPermissionList(permissionService.showAll(map));
-        model.addAttribute("roleVo", roleVo);
-        return "admin/roleVo";
+        return roleVo;
     }
-    /*
+
     @ResponseBody
-    @RequestMapping("/testAll")
+    @RequestMapping("/all")
     public List<RoleVo> testRoleVoList() {
         List<Role> roleList = roleService.showAll(new HashMap<>());
         List<RoleVo> roleVoList = new ArrayList<>();
@@ -110,5 +90,5 @@ public class DoRoleController {
             roleVoList.add(roleVo);
         }
         return roleVoList;
-    }*/
+    }
 }

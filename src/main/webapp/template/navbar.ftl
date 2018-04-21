@@ -12,10 +12,6 @@
         </div>
         <div class="collapse navbar-collapse navbar-right" id="navbar-collapse-1">
             <ul class="nav navbar-nav mynav">
-                <#if Session.user?exists >
-                    ${Session.user.imgUrl}
-                </#if>
-                <#if userStatus??>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-top: 0px; padding-bottom: 0px;">
                             <img src="/resources/head.png" class="img-circle"></a>
@@ -29,10 +25,8 @@
                         </ul>
                     </li>
                     <li><button class=" btn btn-default navbar-btn"><a href="/pages/editor.html" class="write"><span class="glyphicon glyphicon-pencil"></span> 写文章</a></button></li>
-                <#else>
-                    <li><a href="/pages/login.html">登录</a></li>
-                    <li><a href="/pages/register.html">注册</a></li>
-                </#if>
+                    <#--<li><a href="/pages/login.html">登录</a></li>-->
+                    <#--<li><a href="/pages/register.html">注册</a></li>-->
             </ul>
             <form class="navbar-form navbar-left">
                 <div class="input-group">

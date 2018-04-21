@@ -6,7 +6,6 @@ import com.taylorsfan.blog.service.UserService;
 import com.taylorsfan.blog.service.vo.BlogVoService;
 import com.taylorsfan.blog.service.vo.CommentVoService;
 import com.taylorsfan.blog.service.vo.UserVoService;
-import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.util.StringsUtil;
 import com.taylorsfan.blog.vo.BlogVo;
 import com.taylorsfan.blog.vo.CommentVo;
@@ -30,7 +29,6 @@ public class IndexController {
     private final UserVoService userVoService;
     private final UserService userService;
     private final CommentVoService commentVoService;
-    private final CommentService commentService;
 
     @Autowired
     public IndexController(BlogVoService blogVoService, UserVoService userVoService, CommentVoService commentVoService, UserService userService, CommentService commentService) {
@@ -38,12 +36,11 @@ public class IndexController {
         this.userVoService = userVoService;
         this.commentVoService = commentVoService;
         this.userService = userService;
-        this.commentService = commentService;
     }
 
     @RequestMapping("/")
     public String index(Model model) {
-        List<BlogVo> blogVoList = blogVoService.blogVoList(1, 5, 1, 0, 0);
+        List<BlogVo> blogVoList = blogVoService.blogVoList(1, 5, 0, 0, 0,StringsUtil.FRONT);
         model.addAttribute("blogVoList", blogVoList);
         return "index";
     }
@@ -67,7 +64,7 @@ public class IndexController {
         }
         //点击到文章按钮
         else if (span.equals(StringsUtil.ARTICLE)) {
-            blogVoList = blogVoService.blogVoList(1, 5, 1, userId, 0);
+            blogVoList = blogVoService.blogVoList(1, 5, 1, userId, 0,StringsUtil.FRONT);
             model.addAttribute("blogVoList", blogVoList);
         }
         //点击到最新评论按钮
