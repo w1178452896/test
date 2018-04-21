@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.repository.BlogMapper;
 import com.taylorsfan.blog.service.BlogService;
+import com.taylorsfan.blog.util.StringsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,47 +38,54 @@ public class BlogServiceImpl implements BlogService {
         List<Blog> blogList;
         //分页
         PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
-        // 用户主页按分类查询
-        if (map.containsKey("userId") && !map.containsKey("status") && map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllNormalBySortIdAndUserId(map.get("userId"), map.get("sortId"));
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
-        }
-        //用户个人主页显示
-        else if (map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllNormalByUserId(map.get("userId"));
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
-        }
-        //首页显示按分类
-        else if (!map.containsKey("userId") && map.containsKey("status") && map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllNormalBySortId(map.get("status"), map.get("sortId"));
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
-        }
-        //首页显示
-        else if (!map.containsKey("userId") && map.containsKey("status") && !map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllNormal();
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
-        }
-        // 后台按用户
-        else if (map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllByUserId(map.get("userId"));
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
-        }
-        // 后台按分类
-        else if (!map.containsKey("userId") && !map.containsKey("status") && map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllBySortId(map.get("sortId"));
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
-        }
-        //后台所有
-        else if (!map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
-            blogList = blogMapper.selectAll();
-            PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
-            return pageInfo.getList();
+        if (map.containsKey(StringsUtil.FRONT)) {
+            // 用户主页按分类查询
+            if (map.containsKey("userId") && map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllNormalBySortIdAndUserId(map.get("userId"), map.get("sortId"));
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
+            //用户个人主页显示
+            else if (map.containsKey("userId") && !map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllNormalByUserId(map.get("userId"));
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
+            //首页显示按分类
+            else if (!map.containsKey("userId") && map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllNormalBySortId(map.get("sortId"));
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
+            //首页显示
+            else if (!map.containsKey("userId") && !map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllNormal();
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
+        } else if (map.containsKey(StringsUtil.BACKGROUND)) {
+            // 后台按用户
+            if (map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllByUserId(map.get("userId"));
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
+            // 后台按分类
+            else if (!map.containsKey("userId") && !map.containsKey("status") && map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllBySortId(map.get("sortId"));
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
+            //后台按状态查找
+            else if (!map.containsKey("userId") && map.containsKey("status") && map.containsKey("sortId")) {
+                blogList = blogMapper.selectAllByStatus(map.get("status"));
+            }
+            //后台所有
+            else if (!map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
+                blogList = blogMapper.selectAll();
+                PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
+                return pageInfo.getList();
+            }
         }
         return null;
     }

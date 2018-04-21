@@ -12,4 +12,6 @@ public class StringsUtil {
     public static String UNLIKE = "取消点赞";
     public static String PASSED = "通过";
     public static String UN_PASSED = "未通过";
+    public static String FRONT = "前台";
+    public static String BACKGROUND = "后台";
 }

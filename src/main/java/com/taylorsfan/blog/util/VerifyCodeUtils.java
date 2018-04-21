@@ -29,7 +29,6 @@ public class VerifyCodeUtils{
     /**
      * 使用系统默认字符源生成验证码
      * @param verifySize    验证码长度
-     * @return
      */
     public static String generateVerifyCode(int verifySize){
         return generateVerifyCode(verifySize, VERIFY_CODES);
@@ -38,7 +37,6 @@ public class VerifyCodeUtils{
      * 使用指定源生成验证码
      * @param verifySize    验证码长度
      * @param sources   验证码字符源
-     * @return
      */
     public static String generateVerifyCode(int verifySize, String sources){
         if(sources == null || sources.length() == 0){
@@ -55,12 +53,6 @@ public class VerifyCodeUtils{
 
     /**
      * 生成随机验证码文件,并返回验证码值
-     * @param w
-     * @param h
-     * @param outputFile
-     * @param verifySize
-     * @return
-     * @throws IOException
      */
     public static String outputVerifyImage(int w, int h, File outputFile, int verifySize) throws IOException{
         String verifyCode = generateVerifyCode(verifySize);
@@ -70,12 +62,6 @@ public class VerifyCodeUtils{
 
     /**
      * 输出随机验证码图片流,并返回验证码值
-     * @param w
-     * @param h
-     * @param os
-     * @param verifySize
-     * @return
-     * @throws IOException
      */
     public static String outputVerifyImage(int w, int h, OutputStream os, int verifySize) throws IOException{
         String verifyCode = generateVerifyCode(verifySize);
@@ -85,11 +71,6 @@ public class VerifyCodeUtils{
 
     /**
      * 生成指定验证码图像文件
-     * @param w
-     * @param h
-     * @param outputFile
-     * @param code
-     * @throws IOException
      */
     public static void outputImage(int w, int h, File outputFile, String code) throws IOException{
         if(outputFile == null){
@@ -111,11 +92,6 @@ public class VerifyCodeUtils{
 
     /**
      * 输出指定验证码图片流
-     * @param w
-     * @param h
-     * @param os
-     * @param code
-     * @throws IOException
      */
     public static void outputImage(int w, int h, OutputStream os, String code) throws IOException{
         int verifySize = code.length();

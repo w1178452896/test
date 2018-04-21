@@ -68,8 +68,8 @@
     <select id="selectAllNormalBySortId" resultMap="BaseResultMap">
         SELECT * FROM blog,sort_blog
         WHERE blog.id=sort_blog.blog_id
-                AND blog.status=#{status}
-                AND sort_blog.sort_id in (1,2)
+                AND blog.status in (1,2)
+                AND sort_blog.sort_id=#{sortId}
     </select>
     <select id="selectAllByUserId" resultMap="BaseResultMap">
         SELECT * FROM blog,user_blog
@@ -82,5 +82,13 @@
                 AND blog.id=sort_blog.blog_id
                 AND user_blog.user_id=#{userId}
                 and blog.status=3
+    </select>
+    <select id="selectAllNeedChecked" resultMap="BaseResultMap">
+        select * from blog
+        where status=2
+    </select>
+    <select id="selectAllByStatus" resultMap="BaseResultMap">
+        select * from blog
+        where status=#{status}
     </select>
 </mapper>
