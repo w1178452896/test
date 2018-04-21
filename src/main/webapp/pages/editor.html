@@ -21,18 +21,6 @@
 <div class="container-fluid">
     <div class="row home">
         <h1><b><a href="#">Blog</a></b></h1>
-        <!--<h3>
-            <small><i>让你专注写作</i></small>
-        </h3>-->
-        <!--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">
-            Button with data-target
-        </button>
-        <div class="collapse" id="collapseExample">
-            <div class="well">
-                ...
-            </div>
-        </div>-->
     </div>
     <div class="setting">
         <span class="glyphicon glyphicon-edit" style="color: #f9f9f9; font-size: 30px; padding: 13px;"></span>
@@ -56,42 +44,64 @@
             <div class="form-group">
                 <label for="sort">文章分类</label>
                 <select class="form-control" id="sort">
-                    <option value="">+ 新建分类</option>
-                    <option value="JAVA" selected="selected">JAVA</option>
+                    <option value="JAVA">JAVA</option>
                     <option value="C++">C++</option>
                     <option value="生活">生活</option>
                     <option value="随笔">随笔</option>
                 </select>
             </div>
+            <div class="input-group" style="margin-bottom: 15px;">
+                <input type="text" name="newSort" class="form-control" placeholder="自定义分类">
+                <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="newSort()">确定</button></span>
+            </div>
             <div>
+                <button type="button" class="btn btn-primary" id="save"  onclick="savelocal();"><span class="glyphicon glyphicon-floppy-saved"></span> 保存草稿</button>
                 <button type="button" class="btn btn-info" id="caogao" onclick="openCaogao();"><span class="glyphicon glyphicon-duplicate"></span> 草稿管理</button>
             </div>
-            <div style="padding-bottom: 20px; margin-top: 90px" class="text-center">
+            <div style="padding-bottom: 20px; margin-top: 50px" class="text-center">
                 <a href="javascript:$.proxy(editor.toolbarHandlers.help, editor)();"><span>Markdown使用帮助</span></a>
             </div>
             <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default" id="save" onclick="savelocal();"><span class="glyphicon glyphicon-floppy-saved"></span> 保存</button>
-                <button type="button" class="btn btn-default" id="share"><span class="glyphicon glyphicon-share-alt"></span> 发布</button>
+                <button type="button" class="btn btn-default" id="exitEditor"><a href="/" style="color: #000000"><span class="fa fa-reply"></span> 退出</a></button>
+                <button type="button" class="btn btn-default" id="share"><span class="fa fa-paper-plane"></span> 发布</button>
             </div>
         </div>
         <div class="writeCaogao" id="writeCaogao">
             <h4 class="text-center"><span class="glyphicon glyphicon-duplicate"></span> 草稿管理</h4>
             <div class="table-responsive" style="height: 380px">
                 <table class="table table-hover">
-                    <tr><th></th><th>标题</th><th>分类</th><th>时间</th><th></th></tr>
+                    <tr><th></th><th>标题</th><th>分类</th><th>时间</th><th><btton class="btn btn-danger btn-sm" onclick="delAll()"><span class="fa fa-trash"> </span> 清空</btton></th></tr>
                     <tbody></tbody>
                 </table>
-                <span class="fa fa-spinner fa-pulse fa-2x" id="loading" style="padding: 0px 130px"></span>
+                <span class="fa fa-spinner fa-spin fa-2x" id="loading" style="padding: 0px 130px"></span>
             </div>
             <div class="pull-right">
-                <button type="button" class="btn btn-danger" id="Cexit" onclick="Cexit()"><span class="glyphicon glyphicon-arrow-right"></span> 返回</button>
+                <button type="button" class="btn btn-default" id="Cexit" onclick="Cexit()"><span class="glyphicon glyphicon-arrow-right"></span> 返回</button>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-xs-12 editor">
             <div id="editormd">
-                <textarea style="display:none;">### Hello !</textarea>
+                <textarea style="display:none;"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" id="myModel">
+    <div class="modal-dialog modal-sm" style="top: 300px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">提示</h5>
+            </div>
+            <div class="modal-body">
+                <p id="modalBody"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">确定</button>
             </div>
         </div>
     </div>
@@ -101,6 +111,8 @@
 <script>
     var editor;
     $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
         // 配置编译器
         editor = editormd({
             id: "editormd",
@@ -146,6 +158,11 @@
         }
     }
 
+    function openalert(message) {
+        $('#modalBody').html(message);
+        $('#myModel').modal();
+    }
+
     //保存到本地
     function savelocal() {
         var number;
@@ -155,7 +172,7 @@
             number = parseInt(localStorage.getItem('number')) + 1;
         }
         var source = editor.getMarkdown();
-        var title = $('#title').val();
+        var title = $('#title').val().substring(0, 4);
         var sort = $('#sort').val();
         var date = new Date();
         date = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
@@ -163,10 +180,12 @@
         var key = 'articleDate' + '_' + number;
         window.localStorage.setItem(key, JSON.stringify(articleDate));
         if (localStorage.getItem(key) == null) {
-            alert('保存失败请重试');
+            // alert('保存失败请重试');
+            openalert('保存失败请重试');
         } else {
             localStorage.setItem('number', number);
-            alert("保存成功！");
+            // alert("保存成功！");
+            openalert('保存成功！');
         }
     }
 
@@ -180,11 +199,12 @@
                 temp = localStorage.getItem(key + '_' + i);
                 if (temp != null) {
                     articleDate = JSON.parse(temp);
-                    $('#writeCaogao table tbody:eq(1)').append('<tr><td>' + i + '</td><td>' + articleDate.title + '</td><td>' + articleDate.sort + '</td><td>' + articleDate.date + '</td><td><a href="javascript:(0)" onclick="delCg(this)"><span class="fa fa-trash"> </span></a>&nbsp;&nbsp;&nbsp;<a href="javascript:(0)" onclick="editorCg(this)"><span class="fa fa-file-text-o"> </span></a></td></tr>')
+                    $('#writeCaogao table tbody:eq(1)').append('<tr><td>' + i + '</td><td>' + articleDate.title + '</td><td>' + articleDate.sort + '</td><td>' + articleDate.date + '</td><td class="text-center"><a href="javascript:(0)" title="删除" onclick="delCg(this)"><span class="fa fa-remove"> </span></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:(0)" title="编辑" onclick="editorCg(this)"><span class="fa fa-file-text-o"> </span></a></td></tr>')
                 }
             }
             $('#loading').remove();
         }
+
     }
 
     //打开草稿管理
@@ -222,6 +242,13 @@
                 localStorage.setItem('remove', remove);
         }
     }
+
+    //清空草稿
+    function delAll() {
+        localStorage.clear();
+        $('#writeCaogao table tbody:eq(1)').html(' ');
+    }
+    //编辑草稿
     function editorCg(o) {
         var id = $(o).parent().parent().children().eq(0).text();
         var temp = JSON.parse(localStorage.getItem('articleDate' + '_' + id));
@@ -231,6 +258,10 @@
         $('#title').val(title);
         $('#sort').val(sort);
         editor.setMarkdown(source);
+    }
+    
+    function newSort() {
+        $('#sort').prepend('<option value="' + $('input[name=newSort]').val() + '" selected="selected">' + $('input[name=newSort]').val() + '</option>');
     }
 
 </script>
