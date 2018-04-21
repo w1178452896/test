@@ -16,7 +16,7 @@
         DELETE FROM blog
         WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
         INSERT INTO blog (create_time,title,content,status)
         VALUES (#{blog.createTime,jdbcType=VARCHAR},#{blog.title,jdbcType=VARCHAR},
                 #{blog.content,jdbcType=VARCHAR},#{blog.status,jdbcType=INTEGER})

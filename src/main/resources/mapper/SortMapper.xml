@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.taylorsfan.blog.repository.SortMapper">
-    <resultMap id="BaseResultMap" type="com.taylorsfan.blog.model.Sort">
+    <resultMap id="BaseResultMap" type="com.taylorsfan.blog.model.Sort" >
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="sort_name" jdbcType="VARCHAR" property="sortName"/>
     </resultMap>
@@ -21,7 +21,7 @@
         DELETE FROM sort
         WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO sort (sort_name)
         VALUES (#{sort.sortName,jdbcType=VARCHAR})
     </insert>
