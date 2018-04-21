@@ -30,7 +30,4 @@
 </div>
 <#include "footer.ftl">
 </body>
-<script>
-
-</script>
 </html>

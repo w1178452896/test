@@ -134,4 +134,10 @@ public class IndexController {
         }
     }
 
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.setAttribute("user", null);
+        return "redirect:/";
+    }
+
 }

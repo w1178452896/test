@@ -39,7 +39,7 @@
                 <br>
                 <div class="input-group">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                    <input type="text" name="password" class="form-control input-lg" placeholder="Password">
+                    <input type="password" name="password" class="form-control input-lg" placeholder="Password">
                 </div>
                 <br>
                 <div class="row">
@@ -66,8 +66,32 @@
     <div id="output" class="fss">
     </div>
 </div>
+<div class="modal fade" tabindex="-1" id="myModel">
+    <div class="modal-dialog modal-sm" style="top: 300px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title">提示</h5>
+            </div>
+            <div class="modal-body">
+                <p id="modalBody"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script>
+
+    function openalert(message) {
+        $('#modalBody').html(message);
+        $('#myModel').modal();
+    }
+
     $("input[name=login]").click(function () {
         $.ajax({
             url: "/user/login",
@@ -82,7 +106,7 @@
                     window.location.href = "/";
                 }
                 else
-                    alert("登录失败请重试！");
+                    openalert('登录失败请重试');
             }
         });
     });

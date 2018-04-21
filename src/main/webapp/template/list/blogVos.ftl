@@ -1,13 +1,14 @@
-<#list blogVoList as blogVo>
+<#if blogVoList ? exists>
+    <#list blogVoList as blogVo>
 <div class="content">
     <div class="text-right">
-        <span>${blogVo.user.username}</span>
+        <span>${(blogVo.user.username)!}</span>
     </div>
     <div class="media">
         <div class="media-body">
-            <div class="media-heading">${blogVo.blog.title}</div>
+            <div class="media-heading">${(blogVo.blog.title)!}</div>
             <div class="content-p">
-                <p>${blogVo.blog.content}</p>
+                <p>${(blogVo.blog.content)!"获取数据失败"}</p>
             </div>
         </div>
         <div class="media-right media-middle">
@@ -24,8 +25,9 @@
         </div>
     </div>
     <div.content-info>
-        收藏&nbsp;<span class="label label-primary">${blogVo.userCount}</span> &nbsp;|&nbsp;<span
-            class="label label-info">${blogVo.blog.createTime}</span>
+        收藏&nbsp;<span class="label label-primary">${(blogVo.userCount)!0}</span> &nbsp;|&nbsp;<span
+            class="label label-info">${(blogVo.blog.createTime)!"2018-01-01"}</span>
     </div.content-info>
 </div>
-</#list>
+    </#list>
+</#if>
