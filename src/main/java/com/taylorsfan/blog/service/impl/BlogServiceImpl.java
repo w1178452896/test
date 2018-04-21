@@ -38,7 +38,7 @@ public class BlogServiceImpl implements BlogService {
         List<Blog> blogList;
         //分页
         PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
-        if (map.containsKey(StringsUtil.FRONT)) {
+        if (map.get("page") == 1) {
             // 用户主页按分类查询
             if (map.containsKey("userId") && map.containsKey("sortId")) {
                 blogList = blogMapper.selectAllNormalBySortIdAndUserId(map.get("userId"), map.get("sortId"));
@@ -63,7 +63,7 @@ public class BlogServiceImpl implements BlogService {
                 PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
                 return pageInfo.getList();
             }
-        } else if (map.containsKey(StringsUtil.BACKGROUND)) {
+        } else if (map.get("page") == 2) {
             // 后台按用户
             if (map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
                 blogList = blogMapper.selectAllByUserId(map.get("userId"));

@@ -1,6 +1,7 @@
 package com.taylorsfan.blog.controller;
 
 import com.taylorsfan.blog.model.Comment;
+import com.taylorsfan.blog.model.User;
 import com.taylorsfan.blog.model.relation.BlogUser;
 import com.taylorsfan.blog.model.relation.SortBlog;
 import com.taylorsfan.blog.model.relation.UserBlog;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,17 +55,24 @@ public class BlogController {
      * 新增文章
      */
     @RequestMapping("/insert")
-    public ResultUtil insert(BlogVo blogVo) {
+    public ResultUtil insert(BlogVo blogVo, HttpSession httpSession) {
         if (blogService.insert(blogVo.getBlog())) {
+            User user = (User) httpSession.getAttribute("user");
+            int blogId = blogVo.getBlog().getId();
+            SortBlog sortBlog = new SortBlog();
             UserBlog userBlog = new UserBlog();
-            userBlog.setBlogId(blogVo.getBlog().getId());
-            userBlog.setUserId(blogVo.getUser().getId());
-            if (userBlogService.insert(userBlog)) {
+            sortBlog.setSortId(blogVo.getSort().getId());
+            sortBlog.setBlogId(blogId);
+            userBlog.setBlogId(blogId);
+            userBlog.setUserId(user.getId());
+            if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
                 return new ResultUtil(200, "success");
             }
+            return new ResultUtil(500, "failure");
         }
         return new ResultUtil(500, "failure");
     }
+
     /**
      * 删除
      */

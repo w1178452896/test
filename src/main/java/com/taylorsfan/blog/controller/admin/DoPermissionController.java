@@ -5,10 +5,10 @@ import com.taylorsfan.blog.service.PermissionService;
 import com.taylorsfan.blog.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author tianle
  */
-@Controller
+@RestController
 @RequestMapping("/admin/permission")
 public class DoPermissionController {
     private final PermissionService permissionService;
@@ -26,20 +26,13 @@ public class DoPermissionController {
         this.permissionService = permissionService;
     }
 
-    @RequestMapping("/all")
-    public String permissionList(Model model) {
-        model.addAttribute("permissionList", permissionService.showAll(new HashMap<>()));
-        return "list/admin/permissions";
-    }
 
-    @ResponseBody
-    @RequestMapping("/testAll")
-    public List<Permission> testPermissionList() {
+    @RequestMapping("/all")
+    public List<Permission> permissionList() {
         return permissionService.showAll(new HashMap<>());
     }
 
     @RequestMapping("/insert")
-    @ResponseBody
     public ResultUtil insert(Permission permission) {
         if (permissionService.insert(permission)) {
             return new ResultUtil(200, "success");
@@ -48,7 +41,6 @@ public class DoPermissionController {
     }
 
     @RequestMapping("/{permissionId}/update")
-    @ResponseBody
     public ResultUtil update(Permission permission, @PathVariable int permissionId) {
         if (permissionService.update(permission)) {
             return new ResultUtil(200, "success");
@@ -57,7 +49,6 @@ public class DoPermissionController {
     }
 
     @RequestMapping("/{permissionId}/delete")
-    @ResponseBody
     public ResultUtil delete(@PathVariable int permissionId) {
         if (permissionService.delete(permissionId)) {
             return new ResultUtil(200, "success");
