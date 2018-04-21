@@ -20,7 +20,7 @@
 <body class="baitian">
 <div class="container-fluid">
     <div class="row home">
-        <h1><b><a href="#">Blog</a></b></h1>
+        <h1><b><a href="/">Blog</a></b></h1>
     </div>
     <div class="setting">
         <span class="glyphicon glyphicon-edit" style="color: #f9f9f9; font-size: 30px; padding: 13px;"></span>
@@ -63,7 +63,7 @@
             </div>
             <div class="btn-group pull-right" role="group">
                 <button type="button" class="btn btn-default" id="exitEditor"><a href="/" style="color: #000000"><span class="fa fa-reply"></span> 退出</a></button>
-                <button type="button" class="btn btn-default" id="share"><span class="fa fa-paper-plane"></span> 发布</button>
+                <button type="button" class="btn btn-default" id="share" onclick="share()"><span class="fa fa-paper-plane"></span> 发布</button>
             </div>
         </div>
         <div class="writeCaogao" id="writeCaogao">
@@ -270,6 +270,27 @@
     function newSort() {
         $('#sort').prepend('<option value="' + $('input[name=newSort]').val() + '" selected="selected">' + $('input[name=newSort]').val() + '</option>');
     }
+
+    function share() {
+        var title = $('#title').val();
+        var source = editor.getMarkdown();
+        var date = new Date();
+        date = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+        $.ajax({
+            url : '/blog/insert',
+            type : 'get',
+            data : {
+                'blog.createTime' : date,
+                'blog.title' : title,
+                'blog.content' : source,
+                'sort.id' : 1
+            },
+            success : function (data) {
+                alert(data.code);
+            }
+        })
+    }
+
 
 </script>
 </html>
