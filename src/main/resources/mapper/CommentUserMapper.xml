@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.taylorsfan.blog.repository.CommentUserMapper">
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
         INSERT INTO comment_user (comment_id,user_id)
         VALUES (#{commentUser.commentId,jdbcType=INTEGER},#{commentUser.userId,jdbcType=INTEGER})
     </insert>

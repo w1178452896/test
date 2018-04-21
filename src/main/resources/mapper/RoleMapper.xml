@@ -16,7 +16,7 @@
         DELETE FROM role
         WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO role (role_name)
         VALUES (#{role.roleName,jdbcType=VARCHAR})
     </insert>

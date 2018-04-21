@@ -17,7 +17,7 @@
         SELECT * FROM comment
         WHERE id=#{id}
     </select>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO comment (create_time,content,status,parent_id)
         VALUES (#{comment.createTime,jdbcType=VARCHAR},#{comment.content,jdbcType=VARCHAR},
         #{comment.status,jdbcType=INTEGER},#{comment.parentId,jdbcType=INTEGER})

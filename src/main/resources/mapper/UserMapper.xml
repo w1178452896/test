@@ -20,7 +20,7 @@
         DELETE FROM user
         WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
         INSERT INTO user (username,password,email,mobile,sex,description,img_url,country,birthday)
         VALUES (#{user.username,jdbcType=VARCHAR},#{user.password,jdbcType=VARCHAR},
         #{user.email,jdbcType=VARCHAR},#{user.mobile,jdbcType=VARCHAR},#{user.sex,jdbcType=INTEGER},
