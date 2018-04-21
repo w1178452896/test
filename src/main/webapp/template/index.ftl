@@ -20,7 +20,7 @@
             <#include "thumbnail.ftl">
                 <div class="contentTitle"><span>热门文章 ></span></div>
             <#--首页内容-->
-            <#include "content.ftl">
+            <#include "list/blogVos.ftl">
         </div>
         <div class="col-md-3 hidden-sm hidden-xs">
             <#--右侧-->
@@ -30,4 +30,7 @@
 </div>
 <#include "footer.ftl">
 </body>
+<script>
+
+</script>
 </html>
