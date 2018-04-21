@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * @author taylorsfan
  */
@@ -38,13 +40,14 @@ public class CommentController {
 
     @RequestMapping("/insert")
     public ResultUtil insert(CommentVo commentVo) {
+        int commentId = (int) new Date().getTime();
         if (commentService.insert(commentVo.getComment())) {
             UserComment userComment = new UserComment();
             BlogComment blogComment = new BlogComment();
             blogComment.setBlogId(commentVo.getBlogId());
-            blogComment.setCommentId(commentVo.getComment().getId());
-            userComment.setUserId(commentVo.getCommentUser().getId());
-            userComment.setCommentId(commentVo.getComment().getId());
+            blogComment.setCommentId(commentId);
+            userComment.setUserId(commentId);
+            userComment.setCommentId(commentId);
             if (userCommentService.insert(userComment) && blogCommentService.insert(blogComment)) {
                 return new ResultUtil(200, "success");
             }

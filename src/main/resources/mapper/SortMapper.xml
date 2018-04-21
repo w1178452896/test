@@ -21,9 +21,9 @@
         DELETE FROM sort
         WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        INSERT INTO sort (sort_name)
-        VALUES (#{sort.sortName,jdbcType=VARCHAR})
+    <insert id="insert" >
+        INSERT INTO sort (id,sort_name)
+        VALUES (#{sort.id},#{sort.sortName,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey">
         UPDATE sort

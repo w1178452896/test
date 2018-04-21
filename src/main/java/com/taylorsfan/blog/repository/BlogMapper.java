@@ -18,7 +18,6 @@ public interface BlogMapper {
 
     Blog selectOneByPrimaryKey(@Param("id") int id);
 
-
     /**
      * 所有
      */

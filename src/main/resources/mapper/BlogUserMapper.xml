@@ -13,8 +13,8 @@
         SELECT count(*) userCount FROM blog_user
         WHERE blog_id=#{blogId}
     </select>
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
-        INSERT INTO blog_user (blog_id,user_id)
-        VALUES (#{blogUser.blogId,jdbcType=INTEGER},#{blogUser.userId,jdbcType=INTEGER})
+    <insert id="insert" >
+        INSERT INTO blog_user (id,blog_id,user_id)
+        VALUES (#{blogUser.id},#{blogUser.blogId,jdbcType=INTEGER},#{blogUser.userId,jdbcType=INTEGER})
     </insert>
 </mapper>

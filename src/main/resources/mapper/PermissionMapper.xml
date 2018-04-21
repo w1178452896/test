@@ -16,9 +16,9 @@
         DELETE FROM permission
         WHERE id=#{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
-        INSERT INTO permission (permission_name)
-        VALUES (#{permission.permissionName,jdbcType=VARCHAR})
+    <insert id="insert" >
+        INSERT INTO permission (id,permission_name)
+        VALUES (#{permission.id},#{permission.permissionName,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey">
         UPDATE permission

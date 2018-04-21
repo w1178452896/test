@@ -1,5 +1,6 @@
 package com.taylorsfan.blog.controller;
 
+import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.model.Comment;
 import com.taylorsfan.blog.model.Sort;
 import com.taylorsfan.blog.model.User;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author taylorsfan
@@ -61,26 +60,29 @@ public class BlogController {
      */
     @RequestMapping("/insert")
     public ResultUtil insert(BlogVo blogVo, HttpSession httpSession) {
-        if (blogService.insert(blogVo.getBlog())) {
-            User user = (User) httpSession.getAttribute("user");
-            int blogId = blogVo.getBlog().getId();
-            SortBlog sortBlog = new SortBlog();
-            UserBlog userBlog = new UserBlog();
-            sortBlog.setSortId(blogVo.getSort().getId());
-            sortBlog.setBlogId(blogId);
-            userBlog.setBlogId(blogId);
-            userBlog.setUserId(user.getId());
-            if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
-                return new ResultUtil(200, "success");
-            }
-            return new ResultUtil(500, "failure");
+        int id = (int) new Date().getTime();
+        Blog blog = blogVo.getBlog();
+        blog.setId(id);
+        blogService.insert(blogVo.getBlog());
+        User user = (User) httpSession.getAttribute("user");
+        SortBlog sortBlog = new SortBlog();
+        UserBlog userBlog = new UserBlog();
+        sortBlog.setSortId(blogVo.getSort().getId());
+        sortBlog.setBlogId(id);
+        userBlog.setBlogId(id);
+        userBlog.setUserId(user.getId());
+        if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
+            return new ResultUtil(200, "success");
         }
         return new ResultUtil(500, "failure");
+
     }
+
     @RequestMapping("/sort/all")
     public List<Sort> SortAll() {
         return sortService.showAll(new HashMap<>());
     }
+
     /**
      * 删除
      */
