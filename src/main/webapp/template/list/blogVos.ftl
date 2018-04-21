@@ -6,9 +6,9 @@
     </div>
     <div class="media">
         <div class="media-body">
-            <div class="media-heading">${(blogVo.blog.title)!}</div>
+            <div class="media-heading"><a href="/blog/${blogVo.blog.id}">${(blogVo.blog.title)!}</a></div>
             <div class="content-p">
-                <p>${(blogVo.blog.content)!"获取数据失败"}</p>
+                <p>${(blogVo.blog.content?substring(0, 100))!"获取数据失败"}......</p>
             </div>
         </div>
         <div class="media-right media-middle">

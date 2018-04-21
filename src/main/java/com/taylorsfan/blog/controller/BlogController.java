@@ -60,21 +60,27 @@ public class BlogController {
      */
     @RequestMapping("/insert")
     public ResultUtil insert(BlogVo blogVo, HttpSession httpSession) {
-        int id = (int) new Date().getTime();
-        Blog blog = blogVo.getBlog();
-        blog.setId(id);
-        blogService.insert(blogVo.getBlog());
-        User user = (User) httpSession.getAttribute("user");
-        SortBlog sortBlog = new SortBlog();
-        UserBlog userBlog = new UserBlog();
-        sortBlog.setSortId(blogVo.getSort().getId());
-        sortBlog.setBlogId(id);
-        userBlog.setBlogId(id);
-        userBlog.setUserId(user.getId());
-        if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
-            return new ResultUtil(200, "success");
+        try {
+            int id = (int) new Date().getTime();
+            Blog blog = blogVo.getBlog();
+            blog.setId(id);
+            blog.setStatus(1);
+            blogService.insert(blogVo.getBlog());
+            User user = (User) httpSession.getAttribute("user");
+            SortBlog sortBlog = new SortBlog();
+            UserBlog userBlog = new UserBlog();
+            sortBlog.setSortId(blogVo.getSort().getId());
+            sortBlog.setBlogId(id);
+            userBlog.setBlogId(id);
+            userBlog.setUserId(user.getId());
+            if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
+                return new ResultUtil(200, "success");
+            }
+            return new ResultUtil(500, "failure");
+
+        } catch (Exception e) {
+            return new ResultUtil(500, "failure");
         }
-        return new ResultUtil(500, "failure");
 
     }
 

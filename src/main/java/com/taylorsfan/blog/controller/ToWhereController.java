@@ -8,4 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class ToWhereController {
+
+    @RequestMapping("/user/index")
+    public String userIndex() {
+        return "user/index";
+    }
 }

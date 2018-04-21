@@ -278,7 +278,7 @@
         date = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
         $.ajax({
             url : '/blog/insert',
-            type : 'get',
+            type : 'post',
             data : {
                 'blog.createTime' : date,
                 'blog.title' : title,
@@ -286,7 +286,10 @@
                 'sort.id' : 1
             },
             success : function (data) {
-                alert(data.code);
+                if (data.code === 200) {
+                    openalert('文章发布成功！');
+                } else
+                    openalert('文章发布失败，请重试！')
             }
         })
     }
