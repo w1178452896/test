@@ -28,14 +28,14 @@ public class DoPermissionController {
 
     @RequestMapping("/all")
     public String permissionList(Model model) {
-        model.addAttribute("permissionList", permissionService.showAll(new HashMap<>()));
+        model.addAttribute("permissionList", permissionService.showAll(new HashMap<String, Integer>()));
         return "list/admin/permissions";
     }
 
     @ResponseBody
     @RequestMapping("/testAll")
     public List<Permission> testPermissionList() {
-        return permissionService.showAll(new HashMap<>());
+        return permissionService.showAll(new HashMap<String, Integer>());
     }
 
     @RequestMapping("/insert")

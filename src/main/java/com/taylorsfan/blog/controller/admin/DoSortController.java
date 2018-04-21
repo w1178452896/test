@@ -30,7 +30,7 @@ public class DoSortController {
 
     @RequestMapping("/all")
     public String SortAll(Model model) {
-        model.addAttribute("sortList", sortService.showAll(new HashMap<>()));
+        model.addAttribute("sortList", sortService.showAll(new HashMap<String, Integer>()));
         return "list/admin/sorts";
     }
 
