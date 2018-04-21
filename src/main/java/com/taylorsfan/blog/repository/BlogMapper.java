@@ -29,9 +29,9 @@ public interface BlogMapper {
     List<Blog> selectAllByUserId(@Param("userId") int userId);
 
     /**
-     * 根据状态查询
+     * 首页
      */
-    List<Blog> selectAllByStatus(@Param("status") int status);
+    List<Blog> selectAllNormal();
 
     /**
      * 根据分类id查询所有文章
@@ -41,27 +41,32 @@ public interface BlogMapper {
     /**
      * 根据用户id和分类id查找所有文章
      */
-    List<Blog> selectAllByStatusAndSortId(@Param("status") int status, @Param("sortId") int sortId);
+    List<Blog> selectAllNormalBySortId(@Param("status") int status, @Param("sortId") int sortId);
 
     /**
-     * 根据用户id和状态查找所有文章
+     * 用户主页显示
      */
-    List<Blog> selectAllByStatusAndUserId(@Param("status") int status, @Param("userId") int userId);
+    List<Blog> selectAllNormalByUserId( @Param("userId") int userId);
 
     /**
-     * 根据用户id和分类查找所有文章
+     *
      */
-    List<Blog> selectAllBySortIdAndUserId(@Param("sortId") int sortId, @Param("userId") int userId);
+    List<Blog> selectAllForbiddenByUserId( @Param("userId") int userId);
 
     /**
-     * 根据用户和分类和状态查找文章
+     * 用户首页分类查看
      */
-    List<Blog> selectAllByStatusAndSortIdAndUserId(@Param("status") int status, @Param("userId") int userId, @Param("sortId") int sortId);
+    List<Blog> selectAllNormalBySortIdAndUserId( @Param("userId") int userId, @Param("sortId") int sortId);
 
     /**
      * 根据评论id查询文章
      */
     Blog selectOneByCommentId(@Param("commentId") int commentId);
+
+    /**
+     * 审核
+     */
+    int updateBlogByStatus(@Param("status") int status, @Param("blogId") int blogId);
 
 
 }

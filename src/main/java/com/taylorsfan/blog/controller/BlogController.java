@@ -1,27 +1,21 @@
 package com.taylorsfan.blog.controller;
 
-import com.taylorsfan.blog.model.Blog;
 import com.taylorsfan.blog.model.Comment;
+import com.taylorsfan.blog.model.relation.BlogUser;
 import com.taylorsfan.blog.model.relation.SortBlog;
 import com.taylorsfan.blog.model.relation.UserBlog;
 import com.taylorsfan.blog.service.BlogService;
 import com.taylorsfan.blog.service.CommentService;
-import com.taylorsfan.blog.service.SortService;
-import com.taylorsfan.blog.service.UserService;
 import com.taylorsfan.blog.service.relation.*;
-import com.taylorsfan.blog.util.MapUtil;
 import com.taylorsfan.blog.util.ResultUtil;
+import com.taylorsfan.blog.util.StringsUtil;
 import com.taylorsfan.blog.vo.BlogVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,30 +23,25 @@ import java.util.Map;
  * 个人主页的blogList，以及blog
  */
 @RequestMapping("/blog")
-@Controller
+@RestController
 public class BlogController {
     private final BlogService blogService;
     private final BlogUserService blogUserService;
     private final UserBlogService userBlogService;
     private final BlogCommentService blogCommentService;
-    private final UserService userService;
-    private final SortService sortService;
     private final CommentService commentService;
     private final SortBlogService sortBlogService;
     private final CommentUserService commentUserService;
     private final UserCommentService userCommentService;
 
     @Autowired
-    public BlogController(BlogService blogService, BlogUserService blogUserService, BlogCommentService
-            blogCommentService, UserService userService, SortService sortService,
-                          CommentService commentService, SortBlogService sortBlogService,
-                          UserBlogService userBlogService, CommentUserService commentUserService,
-                          UserCommentService userCommentService) {
+    public BlogController(BlogService blogService, BlogUserService blogUserService,
+                          BlogCommentService blogCommentService, CommentService commentService,
+                          SortBlogService sortBlogService, UserBlogService userBlogService,
+                          CommentUserService commentUserService, UserCommentService userCommentService) {
         this.blogService = blogService;
         this.blogUserService = blogUserService;
         this.blogCommentService = blogCommentService;
-        this.userService = userService;
-        this.sortService = sortService;
         this.commentService = commentService;
         this.sortBlogService = sortBlogService;
         this.userBlogService = userBlogService;
@@ -63,7 +52,6 @@ public class BlogController {
     /**
      * 新增文章
      */
-    @ResponseBody
     @RequestMapping("/insert")
     public ResultUtil insert(BlogVo blogVo) {
         if (blogService.insert(blogVo.getBlog())) {
@@ -76,11 +64,9 @@ public class BlogController {
         }
         return new ResultUtil(500, "failure");
     }
-
     /**
      * 删除
      */
-    @ResponseBody
     @RequestMapping("/{blogId}/delete")
     public ResultUtil delete(@PathVariable int blogId) {
         Map<String, Integer> map = new HashMap<>();
@@ -102,7 +88,6 @@ public class BlogController {
     /**
      * 更新
      */
-    @ResponseBody
     @RequestMapping("/{blogId}/update")
     public ResultUtil update(BlogVo blogVo, @PathVariable int blogId) {
         if (blogService.update(blogVo.getBlog())) {
@@ -117,19 +102,49 @@ public class BlogController {
         return new ResultUtil(500, "failure");
     }
 
+    @RequestMapping("/{blogId}/like")
+    public ResultUtil like(@PathVariable int blogId, int userId, String operation) {
+        //点赞
+        if (operation.equals(StringsUtil.LIKE)) {
+            BlogUser blogUser = new BlogUser();
+            blogUser.setBlogId(blogId);
+            blogUser.setUserId(userId);
+            if (blogUserService.insert(blogUser)) {
+                return new ResultUtil(500, "failure");
+            }
+            return new ResultUtil(200, "success");
+        }
+        //取消点赞
+        else if (operation.equals(StringsUtil.UNLIKE)) {
+            if (blogUserService.deleteByMoreId(userId)) {
+                return new ResultUtil(200, "success");
+            }
+            return new ResultUtil(500, "failure");
+        }
+        return new ResultUtil(500, "failure");
+
+    }
+
     /**
-     * 观看文章页面
+     * 检查
      */
-    @RequestMapping("/{blogId}")
-    public String blogVo(Model model, @PathVariable int blogId) {
-        BlogVo blogVo = new BlogVo();
-        blogVo.setBlog(blogService.showOne(blogId));
-        blogVo.setUser(userService.showUserByBlogId(blogId));
-        blogVo.setSort(sortService.showSortByBlogId(blogId));
-        blogVo.setUserCount(blogUserService.count(blogId));
-        blogVo.setCommentCount(blogCommentService.count(blogId));
-        model.addAttribute("blogVo", blogService.showOne(blogId));
-        return "user/blogVo";
+    @RequestMapping("/check/blog/{blogId}")
+    public ResultUtil check(@PathVariable int blogId, String ifPassedOrNot) {
+        //通过
+        if (ifPassedOrNot.equals(StringsUtil.PASSED)) {
+            if (blogService.checkBlog(blogId, true)) {
+                return new ResultUtil(200, "success");
+            }
+            return new ResultUtil(500, "failure");
+        }
+        //未通过
+        else if (ifPassedOrNot.equals(StringsUtil.UN_PASSED)) {
+            if (blogService.checkBlog(blogId, false)) {
+                return new ResultUtil(200, "success");
+            }
+            return new ResultUtil(500, "failure");
+        }
+        return new ResultUtil(500, "failure");
     }
 /*
     @ResponseBody
@@ -144,66 +159,6 @@ public class BlogController {
         return blogVo;
     }*/
 
-    /**
-     * 文章显示
-     */
-    @RequestMapping("/all")
-    public String blogVoList(Model model, int pageNum, int pageSize, int status, int userId, int sortId) {
-        Map<String, Integer> map = MapUtil.int2map(pageNum, pageSize);
-        // 用户主页按分类查询
-        if (status != 0 && userId != 0 && sortId != 0) {
-            map.put("status", status);
-            map.put("userId", userId);
-            map.put("sortId", sortId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        //用户个人主页显示
-        if (status != 0 && userId != 0 && sortId == 0) {
-            map.put("status", status);
-            map.put("userId", userId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        //首页显示按分类
-        if (status != 0 && userId == 0 && sortId != 0) {
-            map.put("status", status);
-            map.put("sortId", sortId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        //首页显示
-        if (status != 0 && userId == 0 && sortId == 0) {
-            map.put("status", status);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-
-        // 后台按分类
-        if (status == 0 && userId == 0 && sortId != 0) {
-            map.put("sortId", sortId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        //后台按用户
-        if (status == 0 && userId != 0 && sortId == 0) {
-            map.put("userId", userId);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        //后台按状态
-        if (status != 0 && userId == 0 && sortId == 0) {
-            map.put("status", status);
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        //后台所有
-        if (status == 0 && userId == 0 && sortId == 0) {
-            map2blogVoList(map, model);
-            return "list/blogVos";
-        }
-        return "404";
-    }
     /*
     @ResponseBody
     @RequestMapping("/testAll")
@@ -224,19 +179,4 @@ public class BlogController {
         return blogVoList;
     }*/
 
-    private void map2blogVoList(Map<String, Integer> map, Model model) {
-        List<BlogVo> blogVoList = new ArrayList<>();
-        List<Blog> blogList = blogService.showAll(map);
-        for (Blog blog : blogList) {
-            BlogVo blogVo = new BlogVo();
-            int blogId = blog.getId();
-            blogVo.setUser(userService.showUserByBlogId(blogId));
-            blogVo.setBlog(blogService.showOne(blogId));
-            blogVo.setSort(sortService.showSortByBlogId(blogId));
-            blogVo.setCommentCount(blogCommentService.count(blogId));
-            blogVo.setUserCount(blogUserService.count(blogId));
-            blogVoList.add(blogVo);
-        }
-        model.addAttribute("blogVoList", blogVoList);
-    }
 }

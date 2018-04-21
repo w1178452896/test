@@ -11,4 +11,6 @@ import java.util.Map;
 public interface BlogService extends BaseService<Blog> {
 
     Blog showOneByCommentId(int commentId);
+
+    boolean checkBlog(int blogId,boolean passed);
 }

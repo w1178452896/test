@@ -16,7 +16,6 @@ import java.util.Map;
  */
 @Service
 public class BlogServiceImpl implements BlogService {
-
     private final BlogMapper blogMapper;
 
     @Autowired
@@ -24,14 +23,14 @@ public class BlogServiceImpl implements BlogService {
         this.blogMapper = blogMapper;
     }
 
+
     /**
-     * 后台显示所有文章
-     * 首页显示的正常的文章
-     * 显示的审核中的文章
-     * 显示
-     * 用户正常的文章；
-     * 被封禁的文章；
-     * 正在审核中的文章。
+     * 首页默认显示
+     * 首页分类显示
+     * 个人页面默认显示
+     * 个人页面分类显示
+     * 个人页面按状态显示  (正常显示，需要更改的)
+     * 。
      */
     @Override
     public List<Blog> showAll(Map<String, Integer> map) {
@@ -39,26 +38,26 @@ public class BlogServiceImpl implements BlogService {
         //分页
         PageHelper.startPage(map.get("pageNum"), map.get("pageSize"));
         // 用户主页按分类查询
-        if (map.containsKey("userId") && map.containsKey("status") && map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllByStatusAndSortIdAndUserId(map.get("status"), map.get("userId"), map.get("sortId"));
+        if (map.containsKey("userId") && !map.containsKey("status") && map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllNormalBySortIdAndUserId(map.get("userId"), map.get("sortId"));
             PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
             return pageInfo.getList();
         }
         //用户个人主页显示
-        else if (map.containsKey("userId") && map.containsKey("status") && !map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllByStatusAndUserId(map.get("status"), map.get("userId"));
+        else if (map.containsKey("userId") && !map.containsKey("status") && !map.containsKey("sortId")) {
+            blogList = blogMapper.selectAllNormalByUserId(map.get("userId"));
             PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
             return pageInfo.getList();
         }
         //首页显示按分类
         else if (!map.containsKey("userId") && map.containsKey("status") && map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllByStatusAndSortId(map.get("status"), map.get("sortId"));
+            blogList = blogMapper.selectAllNormalBySortId(map.get("status"), map.get("sortId"));
             PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
             return pageInfo.getList();
         }
-        //首页显示|后台按状态
+        //首页显示
         else if (!map.containsKey("userId") && map.containsKey("status") && !map.containsKey("sortId")) {
-            blogList = blogMapper.selectAllByStatus(map.get("status"));
+            blogList = blogMapper.selectAllNormal();
             PageInfo<Blog> pageInfo = new PageInfo<>(blogList);
             return pageInfo.getList();
         }
@@ -107,4 +106,14 @@ public class BlogServiceImpl implements BlogService {
     public Blog showOneByCommentId(int commentId) {
         return blogMapper.selectOneByCommentId(commentId);
     }
+
+    @Override
+    public boolean checkBlog(int blogId, boolean passed) {
+        if (passed) {
+            return blogMapper.updateBlogByStatus(blogId, 1) != 0;
+        } else {
+            return blogMapper.updateBlogByStatus(blogId, 3) != 0;
+        }
+    }
+
 }

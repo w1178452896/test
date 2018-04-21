@@ -19,64 +19,68 @@
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO blog (create_time,title,content,status)
         VALUES (#{blog.createTime,jdbcType=VARCHAR},#{blog.title,jdbcType=VARCHAR},
-        #{blog.content,jdbcType=VARCHAR},#{blog.status,jdbcType=INTEGER})
+                #{blog.content,jdbcType=VARCHAR},#{blog.status,jdbcType=INTEGER})
     </insert>
     <update id="updateByPrimaryKey">
         UPDATE blog
         SET create_time = #{blog.createTime,jdbcType=VARCHAR},
-        title = #{blog.title,jdbcType=VARCHAR},
-        content = #{blog.content,jdbcType=VARCHAR},
-        status = #{blog.status,jdbcType=INTEGER}
+            title = #{blog.title,jdbcType=VARCHAR},
+            content = #{blog.content,jdbcType=VARCHAR},
+            status = #{blog.status,jdbcType=INTEGER}
         WHERE id=#{blog.id,jdbcType=INTEGER}
+    </update>
+    <update id="updateBlogByStatus">
+        update blog set status = #{status}
+        where id=#{blogId}
     </update>
 
     <select id="selectAllBySortId" resultMap="BaseResultMap">
         SELECT blog.* FROM blog,sort_blog
         WHERE sort_blog.sort_id=#{sortId}
-        AND sort_blog.blog_id=blog.id
+                AND sort_blog.blog_id=blog.id
     </select>
     <select id="selectOneByCommentId" resultMap="BaseResultMap">
         SELECT blog.* FROM blog,blog_comment
         WHERE blog.id=blog_comment.blog_id
-        AND blog_comment.comment_id=#{commentId}
+                AND blog_comment.comment_id=#{commentId}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
         SELECT * FROM blog
     </select>
-    <select id="selectAllByStatusAndSortIdAndUserId" resultMap="BaseResultMap">
+    <select id="selectAllNormalBySortIdAndUserId" resultMap="BaseResultMap">
         SELECT * FROM blog,user_blog,sort_blog
         WHERE blog.id=sort_blog.blog_id
-        AND blog.id=user_blog.blog_id
-        AND sort_id=#{sortId}
-        AND user_id=#{userId}
-        AND blog.status=#{status}
+                AND blog.id=user_blog.blog_id
+                AND sort_id=#{sortId}
+                AND user_id=#{userId}
+                AND blog.status in (1,2)
     </select>
-    <select id="selectAllByStatus" resultMap="BaseResultMap">
+    <select id="selectAllNormal" resultMap="BaseResultMap">
         SELECT * FROM blog
-        WHERE status=#{status}
+        WHERE status in (1,2)
     </select>
-    <select id="selectAllByStatusAndUserId" resultMap="BaseResultMap">
+    <select id="selectAllNormalByUserId" resultMap="BaseResultMap">
         SELECT * FROM blog,user_blog
         WHERE user_blog.blog_id=blog.id
-        AND user_blog.user_id=#{userId}
-        AND blog.status=#{status}
+                AND user_blog.user_id=#{userId}
+                AND blog.status in (1,2)
     </select>
-    <select id="selectAllByStatusAndSortId" resultMap="BaseResultMap">
+    <select id="selectAllNormalBySortId" resultMap="BaseResultMap">
         SELECT * FROM blog,sort_blog
         WHERE blog.id=sort_blog.blog_id
-        AND blog.status=#{status}
-        AND sort_blog.sort_id=#{sortId}
+                AND blog.status=#{status}
+                AND sort_blog.sort_id in (1,2)
     </select>
     <select id="selectAllByUserId" resultMap="BaseResultMap">
         SELECT * FROM blog,user_blog
         WHERE user_blog.blog_id=blog.id
-        AND user_blog.user_id=#{userId}
+                AND user_blog.user_id=#{userId}
     </select>
-    <select id="selectAllBySortIdAndUserId" resultMap="BaseResultMap">
+    <select id="selectAllForbiddenByUserId" resultMap="BaseResultMap">
         select * from user_blog,sort_blog,blog
-        WHERE blog.id = user_blog.blog_id
-        AND blog.id = sort_blog.blog_id
-        AND user_blog.user_id = #{userId}
-        AND sort_blog.sort_id = #{sortId}
+        WHERE blog.id=user_blog.blog_id
+                AND blog.id=sort_blog.blog_id
+                AND user_blog.user_id=#{userId}
+                and blog.status=3
     </select>
 </mapper>

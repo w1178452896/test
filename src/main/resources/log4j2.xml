@@ -7,7 +7,7 @@
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
             <!--这个都知道是输出日志的格式-->
-            <PatternLayout pattern="%d{HH:mm:ss:SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss:SSS} %-5level %class{10} %L %M - %msg%xEx%n"/>
         </Console>
         <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
         <File name="Log" fileName="log/test.log" append="false">
@@ -23,12 +23,16 @@
     </appenders>
     <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
     <loggers>
+        <Logger name="org.apache.ibatis" level="error"/>
+        <Logger name="org.mybatis.spring" level="error"/>
+        <Logger name="org.springframework" level="error"/>
+        <Logger name="org.apache.ibatis.logging.jdbc.BaseJdbcLogger" level="debug"/>
         <!--建立一个默认的root的logger-->
-        <root level="trace">
-            <appender-ref ref="Console"/>
-            <appender-ref ref="Log"/>
-            <appender-ref ref="RollingFile"/>
-        </root>
+        <Root level="debug">
+            <Appender-ref ref="Console"/>
+            <Appender-ref ref="Log"/>
+            <Appender-ref ref="RollingFile"/>
+        </Root>
 
     </loggers>
 
