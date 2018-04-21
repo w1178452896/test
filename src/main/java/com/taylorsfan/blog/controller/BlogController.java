@@ -11,6 +11,7 @@ import com.taylorsfan.blog.service.BlogService;
 import com.taylorsfan.blog.service.CommentService;
 import com.taylorsfan.blog.service.SortService;
 import com.taylorsfan.blog.service.relation.*;
+import com.taylorsfan.blog.util.IdUtil;
 import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.util.StringsUtil;
 import com.taylorsfan.blog.vo.BlogVo;
@@ -60,27 +61,22 @@ public class BlogController {
      */
     @RequestMapping("/insert")
     public ResultUtil insert(BlogVo blogVo, HttpSession httpSession) {
-        try {
-            int id = (int) new Date().getTime();
-            Blog blog = blogVo.getBlog();
-            blog.setId(id);
-            blog.setStatus(1);
-            blogService.insert(blogVo.getBlog());
-            User user = (User) httpSession.getAttribute("user");
-            SortBlog sortBlog = new SortBlog();
-            UserBlog userBlog = new UserBlog();
-            sortBlog.setSortId(blogVo.getSort().getId());
-            sortBlog.setBlogId(id);
-            userBlog.setBlogId(id);
-            userBlog.setUserId(user.getId());
-            if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
-                return new ResultUtil(200, "success");
-            }
-            return new ResultUtil(500, "failure");
-
-        } catch (Exception e) {
-            return new ResultUtil(500, "failure");
+        int id = IdUtil.createId();
+        Blog blog = blogVo.getBlog();
+        blog.setId(id);
+        blog.setStatus(1);
+        blogService.insert(blogVo.getBlog());
+        User user = (User) httpSession.getAttribute("user");
+        SortBlog sortBlog = new SortBlog();
+        UserBlog userBlog = new UserBlog();
+        sortBlog.setSortId(blogVo.getSort().getId());
+        sortBlog.setBlogId(id);
+        userBlog.setBlogId(id);
+        userBlog.setUserId(user.getId());
+        if (userBlogService.insert(userBlog) && sortBlogService.insert(sortBlog)) {
+            return new ResultUtil(200, "success");
         }
+        return new ResultUtil(500, "failure");
 
     }
 

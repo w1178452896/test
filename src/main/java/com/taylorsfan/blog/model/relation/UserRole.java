@@ -33,4 +33,10 @@ public class UserRole {
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
+
+    public UserRole(Integer id, Integer userId, Integer roleId) {
+        this.id = id;
+        this.userId = userId;
+        this.roleId = roleId;
+    }
 }

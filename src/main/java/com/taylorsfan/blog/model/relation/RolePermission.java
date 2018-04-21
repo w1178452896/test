@@ -33,4 +33,10 @@ public class RolePermission {
     public void setPermissionId(Integer permissionId) {
         this.permissionId = permissionId;
     }
+
+    public RolePermission(Integer id, Integer roleId, Integer permissionId) {
+        this.id = id;
+        this.roleId = roleId;
+        this.permissionId = permissionId;
+    }
 }

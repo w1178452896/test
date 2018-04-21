@@ -33,4 +33,5 @@ public class BlogUser {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
 }

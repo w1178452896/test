@@ -33,4 +33,10 @@ public class UserComment {
     public void setCommentId(Integer commentId) {
         this.commentId = commentId;
     }
+
+    public UserComment(Integer id, Integer userId, Integer commentId) {
+        this.id = id;
+        this.userId = userId;
+        this.commentId = commentId;
+    }
 }

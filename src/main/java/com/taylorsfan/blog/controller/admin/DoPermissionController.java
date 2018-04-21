@@ -2,6 +2,7 @@ package com.taylorsfan.blog.controller.admin;
 
 import com.taylorsfan.blog.model.Permission;
 import com.taylorsfan.blog.service.PermissionService;
+import com.taylorsfan.blog.util.IdUtil;
 import com.taylorsfan.blog.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class DoPermissionController {
 
     @RequestMapping("/insert")
     public ResultUtil insert(Permission permission) {
+        permission.setId(IdUtil.createId());
         if (permissionService.insert(permission)) {
             return new ResultUtil(200, "success");
         }

@@ -1,29 +1,24 @@
 package com.taylorsfan.blog.controller;
 
 import com.taylorsfan.blog.model.User;
-import com.taylorsfan.blog.model.relation.BlogUser;
 import com.taylorsfan.blog.model.relation.UserFan;
 import com.taylorsfan.blog.model.relation.UserFocus;
 import com.taylorsfan.blog.model.relation.UserRole;
 import com.taylorsfan.blog.service.UserService;
-import com.taylorsfan.blog.service.relation.*;
-import com.taylorsfan.blog.util.MapUtil;
+import com.taylorsfan.blog.service.relation.UserBlogService;
+import com.taylorsfan.blog.service.relation.UserFanService;
+import com.taylorsfan.blog.service.relation.UserFocusService;
+import com.taylorsfan.blog.service.relation.UserRoleService;
+import com.taylorsfan.blog.util.IdUtil;
 import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.util.StringsUtil;
-import com.taylorsfan.blog.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * @author taylorsfan
@@ -52,10 +47,9 @@ public class UserController {
     @RequestMapping("/register")
     public ResultUtil register(User user, String code, HttpSession session) {
         if (code.equals(session.getAttribute("veryCode"))) {
+            int id = IdUtil.createId();
             if (userService.insert(user)) {
-                UserRole userRole = new UserRole();
-                userRole.setRoleId(1);
-                userRole.setUserId(user.getId());
+                UserRole userRole = new UserRole(id,id,1);
                 if (userRoleService.insert(userRole)) {
                     return new ResultUtil(200, "success");
                 }
@@ -69,7 +63,6 @@ public class UserController {
      */
     @RequestMapping("/logoff")
     public ResultUtil logoff(int userId) {
-
         if (userService.delete(userId) &&
                 userRoleService.deleteByOneId(userId) &&
                 userBlogService.deleteByOneId(userId) &&
@@ -84,7 +77,7 @@ public class UserController {
      * 登陆
      */
     @RequestMapping("/login")
-    public ResultUtil login(String username, String password, String code,  HttpSession httpSession) {
+    public ResultUtil login(String username, String password, String code, HttpSession httpSession) {
         if (code.equals(httpSession.getAttribute("veryCode"))) {
             User user = userService.login(username, password);
             if (user != null) {
@@ -133,7 +126,7 @@ public class UserController {
      * 点赞，关注
      */
     @RequestMapping("/{userId}/focus")
-    public ResultUtil focus(@PathVariable int userId,int focusId ,String operation) {
+    public ResultUtil focus(@PathVariable int userId, int focusId, String operation) {
         //关注
         if (operation.equals(StringsUtil.LIKE)) {
             UserFan userFan = new UserFan();
@@ -142,14 +135,14 @@ public class UserController {
             userFan.setUserId(focusId);
             userFocus.setFocusId(focusId);
             userFocus.setUserId(userId);
-            if (userFanService.insert(userFan)&&userFocusService.insert(userFocus)) {
+            if (userFanService.insert(userFan) && userFocusService.insert(userFocus)) {
                 return new ResultUtil(500, "failure");
             }
             return new ResultUtil(200, "success");
         }
         //取消关注
         else if (operation.equals(StringsUtil.UNLIKE)) {
-            if (userFanService.deleteByMoreId(userId)&&userFocusService.deleteByMoreId(focusId)) {
+            if (userFanService.deleteByMoreId(userId) && userFocusService.deleteByMoreId(focusId)) {
                 return new ResultUtil(200, "success");
             }
             return new ResultUtil(500, "failure");

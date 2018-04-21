@@ -39,7 +39,7 @@ public class IndexController {
     private final CommentVoService commentVoService;
 
     @Autowired
-    public IndexController(BlogVoService blogVoService, UserVoService userVoService, CommentVoService commentVoService, UserService userService, CommentService commentService) {
+    public IndexController(BlogVoService blogVoService, UserVoService userVoService, CommentVoService commentVoService, UserService userService) {
         this.blogVoService = blogVoService;
         this.userVoService = userVoService;
         this.commentVoService = commentVoService;
@@ -48,7 +48,7 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model) {
-        List<BlogVo> blogVoList = blogVoService.blogVoList(1, 5, 0, 0, 0,StringsUtil.FRONT);
+        List<BlogVo> blogVoList = blogVoService.blogVoList(1, 5, 0, 0, 0, StringsUtil.FRONT);
         model.addAttribute("blogVoList", blogVoList);
         return "index";
     }
@@ -72,7 +72,7 @@ public class IndexController {
         }
         //点击到文章按钮
         else if (span.equals(StringsUtil.ARTICLE)) {
-            blogVoList = blogVoService.blogVoList(1, 5, 1, userId, 0,StringsUtil.FRONT);
+            blogVoList = blogVoService.blogVoList(1, 5, 1, userId, 0, StringsUtil.FRONT);
             model.addAttribute("blogVoList", blogVoList);
         }
         //点击到最新评论按钮
@@ -83,7 +83,7 @@ public class IndexController {
         UserVo userVo = userVoService.userVo(userId, user != null);
         userVo.setUser(user);
         httpSession.setAttribute("userVo", user);
-        return "content";
+        return "user/index";
     }
 
     @RequestMapping("/settings/basic")
@@ -132,6 +132,12 @@ public class IndexController {
                 e1.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping("/blog/{blogId}")
+    public String blogVo(Model model, @PathVariable int blogId) {
+        model.addAttribute("blogVo", blogVoService.blogVo(blogId));
+        return "/user/blogVo";
     }
 
     @RequestMapping("/logout")

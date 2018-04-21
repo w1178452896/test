@@ -5,6 +5,7 @@ import com.taylorsfan.blog.model.relation.RolePermission;
 import com.taylorsfan.blog.service.PermissionService;
 import com.taylorsfan.blog.service.RoleService;
 import com.taylorsfan.blog.service.relation.RolePermissionService;
+import com.taylorsfan.blog.util.IdUtil;
 import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.vo.RoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author tianle
@@ -40,11 +38,10 @@ public class DoRoleController {
      */
     @RequestMapping("/insert")
     public ResultUtil insert(Role role, int permissionId) {
+        int id = IdUtil.createId();
+        role.setId(id);
         if (roleService.insert(role)) {
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setRoleId(role.getId());
-            rolePermission.setPermissionId(permissionId);
-            if (rolePermissionService.insert(rolePermission)) {
+            if (rolePermissionService.insert(new RolePermission(id,id,permissionId))) {
                 return new ResultUtil(200, "success");
             }
         }

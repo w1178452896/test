@@ -7,6 +7,7 @@ import com.taylorsfan.blog.service.CommentService;
 import com.taylorsfan.blog.service.relation.BlogCommentService;
 import com.taylorsfan.blog.service.relation.CommentUserService;
 import com.taylorsfan.blog.service.relation.UserCommentService;
+import com.taylorsfan.blog.util.IdUtil;
 import com.taylorsfan.blog.util.ResultUtil;
 import com.taylorsfan.blog.util.StringsUtil;
 import com.taylorsfan.blog.vo.CommentVo;
@@ -40,14 +41,10 @@ public class CommentController {
 
     @RequestMapping("/insert")
     public ResultUtil insert(CommentVo commentVo) {
-        int commentId = (int) new Date().getTime();
+        int id = IdUtil.createId();
         if (commentService.insert(commentVo.getComment())) {
-            UserComment userComment = new UserComment();
-            BlogComment blogComment = new BlogComment();
-            blogComment.setBlogId(commentVo.getBlogId());
-            blogComment.setCommentId(commentId);
-            userComment.setUserId(commentId);
-            userComment.setCommentId(commentId);
+            UserComment userComment = new UserComment(id,commentVo.getCommentUser().getId(),id);
+            BlogComment blogComment = new BlogComment(id,commentVo.getBlogId(),id);
             if (userCommentService.insert(userComment) && blogCommentService.insert(blogComment)) {
                 return new ResultUtil(200, "success");
             }
