@@ -9,3 +9,5 @@ out
 gen
 target/
 src/main/test
+.gitignore
+/src/main/java/com/taylorsfan/blog
